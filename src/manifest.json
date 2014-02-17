@@ -1,0 +1,25 @@
+{
+	"manifest_version": 2,
+
+	"name": "Downloads Router",
+	"description": "Organize your downloads by routing them to folders based on filetype or source.",
+	"version": "0.1",
+	"options_page": "options.html",
+	"homepage_url": "https://bitbucket.org/lfk/downloads-router-chrome-extension",
+
+	"permissions": [
+		"downloads"
+	],
+
+	"background": {
+		"scripts": ["manager.js"],
+		"persistent": false
+	},
+
+	"icons": {
+		"16":  "data/icon16.png",
+		"32":  "data/icon32.png",
+		"48":  "data/icon48.png",
+		"128": "data/icon128.png"
+	}
+}

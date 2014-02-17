@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Downloads Router Configuration</title>
+		<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;subset=latin" rel="stylesheet">
+
+		<style>
+			body {
+				font-family: 'Open Sans', 'Helvetica', 'Arial', sans-serif;
+				font-size: 0.9em;
+				cursor: default;
+			} header {
+				border-bottom: 1px solid #e0e0e0;
+				padding: 5px 0;
+			} header img {
+				vertical-align: middle;
+			} table {
+				width: 100%;
+				margin: 0 0 15px 0;
+			} h1 {
+				font-size: 1.4em;
+				font-weight: 300;
+				vertical-align: middle;
+				display: inline;
+			} h2 {
+				font-size: 1.5em;
+				font-weight: 400;
+			} h3, th {
+				font-size: 1.25em;
+				font-weight: normal;
+				text-align: left;
+			} input[type=text], input[type=url] {
+				width: 90%;
+				padding: 4px;
+				border: none;
+				border-bottom: 1px dashed #888;
+				font-family: monospace;
+			} button {
+				padding: 10px;
+				cursor: pointer;
+			} button.delete {
+				color: #cc0000;
+				font-weight: bold;
+				font-size: 1.4em;
+				padding: 2px;
+				border: none;
+				background: transparent;
+			} button.delete:hover {
+				color: #ff0000;
+			} pre {
+				font-size: 0.85em;
+				color: #555;
+				border-left: 5px solid #ccc;
+				padding: 0 0 0 10px;
+			} p {
+				text-align: justify;
+			} a {
+				color: #0050cc;
+				text-decoration: none;
+			} a:hover {
+				color: #000000;
+			} #wrap {
+				width: 60%;
+				min-width: 500px;
+				margin: 10px auto;
+				overflow: hidden;
+			} #status {
+				width: 100%;
+				text-align: center;
+				font-size: 1.3em;
+				background-color: #fff;
+				box-shadow: 1px 0 4px #ccc;
+				padding: 15px 0;
+				display: none;
+				position: fixed;
+				top: 0px;
+			} .green {
+				color: #00aa00;
+				font-weight: bold;
+			} .note {
+				font-style: italic;
+				font-size: 0.85em;
+				color: #333;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="status"></div>
+		<div id="wrap">
+			<header>
+				<img id="dr-icon" src="data/icon32.png" alt="DR" height="26" width="30">
+				<h1>Downloads Router Configuration</h1>
+			</header>
+
+			<p>Hi there! This extension lets you specify "routing rules" for files that you download.</p>
+			<p>If a route exists, a suggestion is sent to your browser as it tries to figure out where to save the file. Some items are downloaded directly, but if you right-click and choose "Save As&hellip;", your manual selection naturally takes precedence.</p>
+			<p>You may also define download routes based on the source website. Should a match be made against such a rule, it is considered of higher priority than the filetype-based routes.</p>
+			
+			<h3>Limitations</h3>
+			<ul>
+				<li>All destination folders must be located within your main <em>Downloads</em> folder</li>
+				<li>Trailing characters for destination folders are essential!
+					<ul>
+						<li>Mac OS X and Linux: /</li>
+						<li>Windows: \</li>
+					</ul>
+				</li>
+				<li>Currently no dialog-based folder chooser available<br>
+					(<em>&lt;input type="file" webkitdirectory&gt;</em> unstable&hellip;)</li>
+			</ul>
+	
+			<h2>Filetype &#8680; folder mapping</h2>
+			<table id="mime_mapping_table">
+				<thead>
+					<tr><th>Filetype (MIME)</th><th></th><th>Destination folder</th><th></th></tr>
+				</thead>
+				<tbody>
+				<tr><td colspan="4"><button id="add_mime_route"><span class="green">+</span> Add new routing rule</button></td></tr>
+				</tbody>
+			</table>
+
+			<h2>Referrer &#8680; folder mapping</h2>
+			<table id="referrer_mapping_table">
+				<thead>
+					<tr><th>Source domain</th><th></th><th>Destination folder</th><th></th></tr>
+				</thead>
+				<tbody>
+				<tr><td colspan="4"><button id="add_referrer_route"><span class="green">+</span> Add new routing rule</button></td></tr>
+				</tbody>
+			</table>
+			<p class="note">* Please note that larger websites often utilize Content Distribution Networks, which means that the referrer for a certain image might not be the same as the domain of the website you are visiting. Facebook, for instance, uses the Akamai network to serve images.</p>
+
+			<button id="save">&#10004; Save configuration</button>
+
+			<h3>Common MIME types</h3>
+			<p>This table contains a few common MIME types that might help you set up your routing configuration. A more extensive list is available on <a href="http://en.wikipedia.org/wiki/Internet_media_type#List_of_common_media_types">Wikipedia</a>.</p>
+
+			<table id="common_mimetypes">
+				<tbody>
+					<tr><td>application/pdf</td><td>PDF documents</td></tr>
+					<tr><td>application/zip</td><td>Compressed archives</td></tr>
+					<tr><td>application/x-bittorrent</td><td>Torrent files</td></tr>
+					<tr><td>audio/mpeg</td><td>MP3 and other MPEG audio</td></tr>
+					<tr><td>image/gif</td><td>GIF images</td></tr>
+					<tr><td>image/jpeg</td><td>JPEG images</td></tr>
+					<tr><td>image/png</td><td>PNG images</td></tr>
+					<tr><td>video/x-msvideo</td><td>AVI video</td></tr>
+				</tbody>
+			</table>
+
+			<h2>About this extension</h2>
+			<p>This extension was hacked together overnight by yours truly, during the wee hours most sane people spend sleeping. As such, there are certainly many features I've yet to think about, not to mention bugs waiting to be discovered.</p>
+			<p>I'd be most grateful if you'd inform me of any and all such issues via the project source code repository &mdash; and if you feel like adding some code yourself, that'd be beyond awesome!</p>
+
+			<ul>
+				<li><a href="https://bitbucket.org/lfk/downloads-router-chrome-extension">Official Bitbucket repository</a>
+					<ul>
+						<li><a href="https://bitbucket.org/lfk/downloads-router-chrome-extension/issues">Issue tracker</a></li>
+					</ul>
+				</li>
+				<li><a href="http://cbsmth.se">The developer's homepage</a></li>
+				<li><a href="https://plus.google.com/+FredrikKarlström0">The developer on G+</a></li>
+			</ul>
+
+			<img src="http://www.gravatar.com/avatar/ae8bfeb002bf86d989cab8c93e0794c6.png?s=36" alt="Gravatar" style="float: left; margin: 0 15px 0 0;">
+			<p>Best regards,<br>&mdash; Fredrik Karlström</p>
+
+			<h3>Licence</h3>
+			<pre>
+Copyright (c) 2014 Fredrik Karlström
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+</pre>
+
+		</div>
+
+		<script src="options.js"></script>
+	</body>
+</html>
