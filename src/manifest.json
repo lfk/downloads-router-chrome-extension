@@ -3,7 +3,7 @@
 
 	"name": "Downloads Router",
 	"description": "Organize your downloads by routing them to folders based on filetype or source.",
-	"version": "0.1",
+	"version": "0.2",
 	"options_page": "options.html",
 	"homepage_url": "https://bitbucket.org/lfk/downloads-router-chrome-extension",
 

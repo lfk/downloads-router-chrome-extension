@@ -11,6 +11,10 @@ Changelog
 
 ### 0.2 (February 17, 2014)
 
+* Tested on Windows, updated information in Options to reflect findings
+
+### 0.1 (February 17, 2014)
+
 * Initial commit, tested on Linux (Chromium) and OS X (Google Chrome)
 * Options page allows the creation of routing rules based on filetypes and referrer
 * The manager listens to `onDeterminingFilename` events and creates suggestions based on the maps created on the options page

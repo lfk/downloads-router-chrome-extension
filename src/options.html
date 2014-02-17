@@ -97,18 +97,25 @@
 			<p>If a route exists, a suggestion is sent to your browser as it tries to figure out where to save the file. Some items are downloaded directly, but if you right-click and choose "Save As&hellip;", your manual selection naturally takes precedence.</p>
 			<p>You may also define download routes based on the source website. Should a match be made against such a rule, it is considered of higher priority than the filetype-based routes.</p>
 			
-			<h3>Limitations</h3>
-			<ul>
-				<li>All destination folders must be located within your main <em>Downloads</em> folder</li>
-				<li>Trailing characters for destination folders are essential!
+			<h3>Usage instructions</h3>
+			<dl>
+				<dt>Windows</dt>
+				<dd>
 					<ul>
-						<li>Mac OS X and Linux: /</li>
-						<li>Windows: \</li>
+						<li>Allows absolute paths ("C:\Users\Somebody\Desktop\")</li>
+						<li>Allows relative paths ("torrents\")</li>
+						<li>Allows both slash and backslash as delimiting characters</li>
 					</ul>
-				</li>
-				<li>Currently no dialog-based folder chooser available<br>
-					(<em>&lt;input type="file" webkitdirectory&gt;</em> unstable&hellip;)</li>
-			</ul>
+				</dd>
+				<dt>Linux and OS X</dt>
+				<dd>
+					<ul>
+						<li>Only relative paths allowed</li>
+						<li>Forward slash as delimiting (and trailing) character</li>
+						<li>All destination folders must be located within your main <em>Downloads</em> folder</li>
+					</ul>
+				</dd>
+			</dl>
 	
 			<h2>Filetype &#8680; folder mapping</h2>
 			<table id="mime_mapping_table">
