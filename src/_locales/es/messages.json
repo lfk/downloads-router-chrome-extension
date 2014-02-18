@@ -1,0 +1,8 @@
+{
+	"appName": {
+		"message": "Enrutador de Descargas"
+	},
+	"appDesc": {
+		"message": "Organize tus descargas automaticamente basado en tipo de archivo o dominio de origen."
+	}
+}

@@ -1,0 +1,8 @@
+{
+	"appName": {
+		"message": "Downloads Router"
+	},
+	"appDesc": {
+		"message": "Organise your downloads by routing them to folders based on filetype or source domain."
+	}
+}

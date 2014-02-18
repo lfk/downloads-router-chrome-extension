@@ -5,9 +5,13 @@ Downloads Router is an extension for Chromium and Google Chrome that allows the 
 to establish routing rules, directing downloads to folders based on filetypes and optionally source website.
 
 
-
 Changelog
 ---------
+
+### 0.3 (February 18, 2014)
+
+* Automatically opens the options page directly after installing
+* Added locale support and very rudimentary translations for Swedish and Spanish; options page i18n pending
 
 ### 0.2 (February 17, 2014)
 

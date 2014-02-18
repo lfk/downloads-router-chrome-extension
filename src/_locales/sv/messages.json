@@ -1,0 +1,8 @@
+{
+	"appName": {
+		"message": "Downloads Router"
+	},
+	"appDesc": {
+		"message": "Sortera dina nedladdningar automatiskt per filtyp eller ursprungsdomän."
+	}
+}

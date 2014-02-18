@@ -23,3 +23,8 @@ chrome.downloads.onDeterminingFilename.addListener(function(downloadItem, sugges
 	
 	suggest({ filename: folder + downloadItem.filename });
 });
+
+if(!localStorage.getItem('dr_mime_map')) {
+	// Open the options page directly after installing the extension
+	chrome.tabs.create({ url: "options.html" });
+}
