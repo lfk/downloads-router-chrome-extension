@@ -102,17 +102,25 @@
 				<dt>Windows</dt>
 				<dd>
 					<ul>
-						<li>Allows absolute paths ("C:\Users\Somebody\Desktop\")</li>
-						<li>Allows relative paths ("torrents\")</li>
-						<li>Allows both slash and backslash as delimiting characters</li>
+						<li>Allows absolute paths ("C:\Users\YourName\Desktop\")</li>
+						<li>Allows relative paths ("Torrents/")</li>
+						<li>Allows both forward and backward slash as delimiting characters</li>
 					</ul>
 				</dd>
-				<dt>Linux and OS X</dt>
+				<dt>Mac OS X</dt>
 				<dd>
 					<ul>
-						<li>Only relative paths allowed</li>
-						<li>Forward slash as delimiting (and trailing) character</li>
-						<li>All destination folders must be located within your main <em>Downloads</em> folder</li>
+						<li>Allows absolute paths ("/Users/YourName/Pictures/")</li>
+						<li>Allows relative paths ("References/")
+						<li>Forward slash as delimiting character</li>
+					</ul>
+				</dd>
+				<dt>Linux</dt>
+				<dd>
+					<ul>
+						<li>Destination folders <em>might</em> need to be located within your primary "Downloads" folder</li>
+						<li>Paths must be relative to primary "Downloads" folder</li>
+						<li>Forward slash as delimiting character</li>
 					</ul>
 				</dd>
 			</dl>
@@ -140,8 +148,19 @@
 
 			<button id="save">&#10004; Save configuration</button>
 
+			<h3>Troubleshooting</h3>
+			<p class="note">Not working as intended? Here's some common issues.<br>Please get in touch if you think your trouble lies elsewhere!</em></p>
+			<h5>Domain-based routing</h5>
+			<ul>
+				<li>Some websites serve content through other domains than what is visible in the Omnibar. To verify if this might be your issue, right-click the item and "inspect" it &ndash; look for other domains in the highlighted area.</li>
+			</ul>
+			<h5>MIME-based routing</h5>
+			<ul>
+				<li>Some websites serve binary content as "octet-streams," thereby hiding the correct MIME-type. The plugin automatically attempts to match common extensions, but this approach will not cover all cases. Domain-based routing could serve as a workaround in many cases.</li>
+			</ul>
+
 			<h3>Common MIME types</h3>
-			<p>This table contains a few common MIME types that might help you set up your routing configuration. A more extensive list is available on <a href="http://en.wikipedia.org/wiki/Internet_media_type#List_of_common_media_types">Wikipedia</a>.</p>
+			<p class="note">This table contains a few common MIME types that might help you set up your routing configuration. A more extensive list is available on <a href="http://en.wikipedia.org/wiki/Internet_media_type#List_of_common_media_types">Wikipedia</a>.</p>
 
 			<table id="common_mimetypes">
 				<tbody>

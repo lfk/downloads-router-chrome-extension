@@ -6,7 +6,7 @@
 	"description": "__MSG_appDesc__",
 	"default_locale": "en",
 
-	"version": "0.3",
+	"version": "0.4",
 	"options_page": "options.html",
 	"homepage_url": "https://bitbucket.org/lfk/downloads-router-chrome-extension",
 

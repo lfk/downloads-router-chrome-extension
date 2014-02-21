@@ -4,7 +4,7 @@ chrome.downloads.onDeterminingFilename.addListener(function(downloadItem, sugges
 	ref_map = JSON.parse(localStorage.getItem('dr_referrer_map'));
 
 	if(Object.keys(ref_map).length) {
-		var matches = downloadItem.referrer.match(/^https?\:\/\/([^\/:?#]+)(?:[\/:?#]|$)/i);
+		var matches    = downloadItem.referrer.match(/^https?\:\/\/([^\/:?#]+)(?:[\/:?#]|$)/i);
 		var ref_domain = matches && matches[1];
 
 		if(ref_map[ref_domain]) {
@@ -14,13 +14,32 @@ chrome.downloads.onDeterminingFilename.addListener(function(downloadItem, sugges
 	}
 
 	/* MIME-based mapping */
-	mime_map = JSON.parse(localStorage.getItem('dr_mime_map'));
+	mime_map  = JSON.parse(localStorage.getItem('dr_mime_map'));
+	mime_type = downloadItem.mime;    
 
-	folder = mime_map[downloadItem.mime];
+	// Octet-stream workaround
+	if(mime_type == 'application/octet-stream') {
+		var matches   = downloadItem.filename.match(/\.([0-9a-z]+)(?:[\?#]|$)/i);
+		var extension = matches && matches[1];
+		var mapping   = {
+			'mp3': 'audio/mpeg',
+			'pdf': 'application/pdf',
+			'zip': 'application/zip',
+			'png': 'image/png',
+			'jpg': 'image/jpeg',
+			'avi': 'video/x-msvideo'
+		};
+
+		if(mapping[extension]) {
+			mime_type = mapping[extension];
+		}
+	}
+
+	folder = mime_map[mime_type];
 	if(!folder) {
 		return;
 	}
-	
+
 	suggest({ filename: folder + downloadItem.filename });
 });
 
