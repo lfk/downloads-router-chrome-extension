@@ -12,6 +12,11 @@ to establish routing rules, directing downloads to folders based on filetypes an
 Changelog
 ---------
 
+### 0.5 (March 03, 2014)
+
+* Tabbed interface for the configuration page
+* Very rudimentary trailing character check implemented
+
 ### 0.4 (February 20, 2014)
 
 * Implemented a basic workaround for downloads sent as `application/octet-stream`

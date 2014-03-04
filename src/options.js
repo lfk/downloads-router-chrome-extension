@@ -9,7 +9,9 @@ function save_options() {
 		for(var i = 0; i < tables[idx].rows.length - 1; i++) {
 			fields = tables[idx].rows[i].getElementsByTagName('input');
 			if(fields[0].value != '' && fields[1].value != '') {
-				maps[idx][fields[0].value] = fields[1].value;
+				target_directory = check_trailing(fields[1].value);
+				//maps[idx][fields[0].value] = fields[1].value;
+				maps[idx][fields[0].value] = target_directory;
 			}
 		}
 	}
@@ -83,6 +85,21 @@ function restore_options() {
 
 		add_table_row(ref_table, refInput, pathInput);
 	}
+}
+
+function check_trailing(path) {
+	if(path.slice(-1) == '/' || path.slice(-1) == '\\') {
+		return path;
+	}
+
+	if(navigator.platform.indexOf('Win') != -1) {
+		if(path.indexOf('\\') != -1) { // Could be an escape, but it's a half-decent guess
+			return path + '\\';
+		}
+	}
+
+	// Windows with no \ delimiter, OSX, Linux, other thing; let's just attempt with a forward slash for now
+	return path + '/'
 }
 
 function add_table_row(table, element1, element2) {
