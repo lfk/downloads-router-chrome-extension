@@ -7,22 +7,30 @@
 
 		<style>
 			body {
+				background-color: #f7f7f7;
 				font-family: 'Open Sans', 'Helvetica', 'Arial', sans-serif;
 				font-size: 0.9em;
 				cursor: default;
 			} header {
 				border-bottom: 1px solid #e0e0e0;
 				padding: 5px 0;
+				margin: 0 0 15px 0;
 			} header img {
 				vertical-align: middle;
 			} table {
 				width: 100%;
 				margin: 0 0 15px 0;
-			} h1 {
+				border-spacing: 0;
+			} header h1 {
 				font-size: 1.4em;
 				font-weight: 300;
 				vertical-align: middle;
 				display: inline;
+			} .tab h1 {
+				text-transform: uppercase;
+				font-size: 1.6em;
+				color: #5075ce;
+				font-weight: 200;
 			} h2 {
 				font-size: 1.5em;
 				font-weight: 400;
@@ -34,24 +42,38 @@
 				width: 90%;
 				padding: 4px;
 				border: none;
-				border-bottom: 1px dashed #888;
+				border-bottom: 1px dotted #cecece;
 				font-family: monospace;
 			} button {
+				border: none;
 				padding: 10px;
 				cursor: pointer;
+			} button.btn, button.btn2 {
+				background-color: #333;
+				color: #fff;
+				transition: .2s ease;
+				padding: 13px 0;
+				width: 100%;
+			} button.btn2 {
+				background-color: #38851b;
+			} button.btn:hover {
+				background-color: #5f90e5;
+			} button.btn2:hover {
+				background-color: #73ce50;
 			} button.delete {
 				color: #cc0000;
 				font-weight: bold;
 				font-size: 1.4em;
 				padding: 2px;
-				border: none;
 				background: transparent;
 			} button.delete:hover {
 				color: #ff0000;
+				background: transparent;
 			} pre {
 				font-size: 0.85em;
 				color: #555;
 				border-left: 5px solid #ccc;
+				line-height: 1.4em;
 				padding: 0 0 0 10px;
 			} p {
 				text-align: justify;
@@ -71,6 +93,7 @@
 				font-size: 1.3em;
 				background-color: #fff;
 				box-shadow: 1px 0 4px #ccc;
+				transition: .6s ease;
 				padding: 15px 0;
 				display: none;
 				position: fixed;
@@ -83,6 +106,34 @@
 				font-size: 0.85em;
 				color: #333;
 			}
+
+			ul#nav {
+				list-style: none;
+				margin: 0;
+				padding: 0;
+			} ul#nav > li {
+				display: inline-block;
+				background-color: #6f95e5;
+				color: #fff;
+				font-size: 1.05em;
+				font-weight: 200;
+				padding: 10px 15px;
+				cursor: pointer;
+				transition: .2s ease;
+			} ul#nav > li:hover {
+				background-color: #5370ca;
+			} ul#nav > li.active {
+				margin: 0;
+				background-color: #fff;
+				color: #000;
+			} .tab {
+				overflow: hidden;
+				margin: 0 2px 5px 0;
+				background-color: #fff;
+				box-shadow: 1px 1px 3px #bbb;
+				padding: 10px 20px;
+				transition: .4s ease;
+			}
 		</style>
 	</head>
 	<body>
@@ -93,107 +144,132 @@
 				<h1>Downloads Router Configuration</h1>
 			</header>
 
+			<ul id="nav">
+				<li id="nav_routing" data-tab="routing">Routing rules</li><li id="nav_usage" data-tab="usage">Usage instructions</li><li id="nav_about" data-tab="about">About</li>
+			</ul>
+
+			<!--
 			<p>Hi there! This extension lets you specify "routing rules" for files that you download.</p>
 			<p>If a route exists, a suggestion is sent to your browser as it tries to figure out where to save the file. Some items are downloaded directly, but if you right-click and choose "Save As&hellip;", your manual selection naturally takes precedence.</p>
 			<p>You may also define download routes based on the source website. Should a match be made against such a rule, it is considered of higher priority than the filetype-based routes.</p>
-			
-			<h3>Usage instructions</h3>
-			<dl>
-				<dt>Windows</dt>
-				<dd>
-					<ul>
-						<li>Allows absolute paths ("C:\Users\YourName\Desktop\")</li>
-						<li>Allows relative paths ("Torrents/")</li>
-						<li>Allows both forward and backward slash as delimiting characters</li>
-					</ul>
-				</dd>
-				<dt>Mac OS X</dt>
-				<dd>
-					<ul>
-						<li>Allows absolute paths ("/Users/YourName/Pictures/")</li>
-						<li>Allows relative paths ("References/")
-						<li>Forward slash as delimiting character</li>
-					</ul>
-				</dd>
-				<dt>Linux</dt>
-				<dd>
-					<ul>
-						<li>Destination folders <em>might</em> need to be located within your primary "Downloads" folder</li>
-						<li>Paths must be relative to primary "Downloads" folder</li>
-						<li>Forward slash as delimiting character</li>
-					</ul>
-				</dd>
-			</dl>
+			-->
+
+			<div id="content">
+				<div class="tab" id="routing">
+					<h1>Routing rules</h1>
+
+					<h2>Filetype &#8680; folder mapping</h2>
+					<table id="mime_mapping_table">
+						<thead>
+							<tr><th>Filetype (MIME)</th><th></th><th>Destination folder</th><th></th></tr>
+						</thead>
+						<tbody>
+						<tr><td colspan="4"><button id="add_mime_route" class="btn"><strong>+</strong> Add new routing rule</button></td></tr>
+						</tbody>
+					</table>
 	
-			<h2>Filetype &#8680; folder mapping</h2>
-			<table id="mime_mapping_table">
-				<thead>
-					<tr><th>Filetype (MIME)</th><th></th><th>Destination folder</th><th></th></tr>
-				</thead>
-				<tbody>
-				<tr><td colspan="4"><button id="add_mime_route"><span class="green">+</span> Add new routing rule</button></td></tr>
-				</tbody>
-			</table>
+					<h2>Referrer &#8680; folder mapping</h2>
+					<table id="referrer_mapping_table">
+						<thead>
+							<tr><th>Source domain</th><th></th><th>Destination folder</th><th></th></tr>
+						</thead>
+						<tbody>
+						<tr><td colspan="4"><button id="add_referrer_route" class="btn"><strong>+</strong> Add new routing rule</button></td></tr>
+						</tbody>
+					</table>
+					<p class="note">* Please note that larger websites often utilize Content Distribution Networks, which means that the referrer for a certain image might not be the same as the domain of the website you are visiting. Facebook, for instance, uses the Akamai network to serve images.</p>
 
-			<h2>Referrer &#8680; folder mapping</h2>
-			<table id="referrer_mapping_table">
-				<thead>
-					<tr><th>Source domain</th><th></th><th>Destination folder</th><th></th></tr>
-				</thead>
-				<tbody>
-				<tr><td colspan="4"><button id="add_referrer_route"><span class="green">+</span> Add new routing rule</button></td></tr>
-				</tbody>
-			</table>
-			<p class="note">* Please note that larger websites often utilize Content Distribution Networks, which means that the referrer for a certain image might not be the same as the domain of the website you are visiting. Facebook, for instance, uses the Akamai network to serve images.</p>
+					<button id="save" class="btn2">&#10004; Save configuration</button>
 
-			<button id="save">&#10004; Save configuration</button>
+					<h2>Common MIME types</h2>
+					<p class="note">This table contains a few common MIME types that might help you set up your routing configuration. A more extensive list is available on <a href="http://en.wikipedia.org/wiki/Internet_media_type#List_of_common_media_types">Wikipedia</a>.</p>
 
-			<h3>Troubleshooting</h3>
-			<p class="note">Not working as intended? Here's some common issues.<br>Please get in touch if you think your trouble lies elsewhere!</em></p>
-			<h5>Domain-based routing</h5>
-			<ul>
-				<li>Some websites serve content through other domains than what is visible in the Omnibar. To verify if this might be your issue, right-click the item and "inspect" it &ndash; look for other domains in the highlighted area.</li>
-			</ul>
-			<h5>MIME-based routing</h5>
-			<ul>
-				<li>Some websites serve binary content as "octet-streams," thereby hiding the correct MIME-type. The plugin automatically attempts to match common extensions, but this approach will not cover all cases. Domain-based routing could serve as a workaround in many cases.</li>
-			</ul>
+					<table id="common_mimetypes">
+						<tbody>
+							<tr><td>application/pdf</td><td>PDF documents</td></tr>
+							<tr><td>application/zip</td><td>Compressed archives</td></tr>
+							<tr><td>application/x-bittorrent</td><td>Torrent files</td></tr>
+							<tr><td>audio/mpeg</td><td>MP3 and other MPEG audio</td></tr>
+							<tr><td>image/gif</td><td>GIF images</td></tr>
+							<tr><td>image/jpeg</td><td>JPEG images</td></tr>
+							<tr><td>image/png</td><td>PNG images</td></tr>
+							<tr><td>video/x-msvideo</td><td>AVI video</td></tr>
+						</tbody>
+					</table>
 
-			<h3>Common MIME types</h3>
-			<p class="note">This table contains a few common MIME types that might help you set up your routing configuration. A more extensive list is available on <a href="http://en.wikipedia.org/wiki/Internet_media_type#List_of_common_media_types">Wikipedia</a>.</p>
+					<h2>Troubleshooting</h2>
+					<p class="note">Not working as intended? Here's some common issues.<br>Please get in touch if you think your trouble lies elsewhere!</em></p>
 
-			<table id="common_mimetypes">
-				<tbody>
-					<tr><td>application/pdf</td><td>PDF documents</td></tr>
-					<tr><td>application/zip</td><td>Compressed archives</td></tr>
-					<tr><td>application/x-bittorrent</td><td>Torrent files</td></tr>
-					<tr><td>audio/mpeg</td><td>MP3 and other MPEG audio</td></tr>
-					<tr><td>image/gif</td><td>GIF images</td></tr>
-					<tr><td>image/jpeg</td><td>JPEG images</td></tr>
-					<tr><td>image/png</td><td>PNG images</td></tr>
-					<tr><td>video/x-msvideo</td><td>AVI video</td></tr>
-				</tbody>
-			</table>
-
-			<h2>About this extension</h2>
-			<p>This extension was hacked together overnight by yours truly, during the wee hours most sane people spend sleeping. As such, there are certainly many features I've yet to think about, not to mention bugs waiting to be discovered.</p>
-			<p>I'd be most grateful if you'd inform me of any and all such issues via the project source code repository &mdash; and if you feel like adding some code yourself, that'd be beyond awesome!</p>
-
-			<ul>
-				<li><a href="https://bitbucket.org/lfk/downloads-router-chrome-extension">Official Bitbucket repository</a>
+					<h5>Domain-based routing</h5>
 					<ul>
-						<li><a href="https://bitbucket.org/lfk/downloads-router-chrome-extension/issues">Issue tracker</a></li>
+						<li>Some websites serve content through other domains than what is visible in the Omnibar. To verify if this might be your issue, right-click the item and "inspect" it &ndash; look for other domains in the highlighted area.</li>
 					</ul>
-				</li>
-				<li><a href="http://cbsmth.se">The developer's homepage</a></li>
-				<li><a href="https://plus.google.com/+FredrikKarlström0">The developer on G+</a></li>
-			</ul>
+					<h5>MIME-based routing</h5>
+					<ul>
+						<li>Some websites serve binary content as "octet-streams," thereby hiding the correct MIME-type. The plugin automatically attempts to match common extensions, but this approach will not cover all cases. Domain-based routing could serve as a workaround in many cases.</li>
+					</ul>
 
-			<img src="http://www.gravatar.com/avatar/ae8bfeb002bf86d989cab8c93e0794c6.png?s=36" alt="Gravatar" style="float: left; margin: 0 15px 0 0;">
-			<p>Best regards,<br>&mdash; Fredrik Karlström</p>
 
-			<h3>Licence</h3>
-			<pre>
+				</div>
+				<div class="tab" id="usage">
+					<h1>Usage instructions</h1>
+					<p>Configure where Chrome should save your downloaded files based on file type or source domain.</p>
+					<p>The MIME type routes are the most basic routes; they are superseeded by any matching domain-based rule. Right-clicking and selecting "Save As&hellip;" works the same as always, overriding any and all matching rules.</p>
+					<p>Some operating system-specific rules apply, as follows:</p>
+					<dl>
+						<dt>Windows</dt>
+						<dd>
+							<ul>
+								<li>Allows absolute paths ("C:\Users\YourName\Desktop\")</li>
+								<li>Allows relative paths ("Torrents/")</li>
+								<li>Allows both forward and backward slash as delimiting characters</li>
+							</ul>
+						</dd>
+						<dt>Mac OS X</dt>
+						<dd>
+							<ul>
+								<li>Allows absolute paths ("/Users/YourName/Pictures/")</li>
+								<li>Allows relative paths ("References/")
+								<li>Forward slash as delimiting character</li>
+							</ul>
+						</dd>
+						<dt>Linux</dt>
+						<dd>
+							<ul>
+								<li>Paths must be <em>relative</em> to your default Downloads folder</li>
+								<li>Destination folders <em>must</em> be located within your default Downloads folder
+								<ul>
+									<li>You may work around this limitation by creating <a href="http://en.wikipedia.org/wiki/Symbolic_link">symbolic links</a> within your Downloads folder</li>
+								</ul></li>
+
+								<li>Forward slash as delimiting character</li>
+							</ul>
+						</dd>
+					</dl>
+
+					<p class="note"><strong>Note:</strong> According to the <a href="https://developer.chrome.com/extensions/downloads#method-download">chrome.downloads API</a>, extensions should only be able to suggest paths relative to the default Downloads directory. Currently, however, absolute paths are adhered in Windows and OS X. This might change in future versions of Chrome.</p>
+				</div>
+
+				<div class="tab" id="about">
+					<h1>About this extension</h1>
+					<p>This extension was hacked together overnight by yours truly, during the wee hours most sane people spend sleeping. As such, there are certainly many features I've yet to think about, not to mention bugs waiting to be discovered.</p>
+					<p>I'd be most grateful if you'd inform me of any and all such issues via the project source code repository &mdash; and if you feel like adding some code yourself, that'd be beyond awesome!</p>
+	
+					<ul>
+						<li><a href="https://bitbucket.org/lfk/downloads-router-chrome-extension">Official Bitbucket repository</a>
+							<ul>
+								<li><a href="https://bitbucket.org/lfk/downloads-router-chrome-extension/issues">Issue tracker</a></li>
+							</ul>
+						</li>
+						<li><a href="http://cbsmth.se">The developer's homepage</a></li>
+						<li><a href="https://plus.google.com/+FredrikKarlström0">The developer on G+</a></li>
+					</ul>
+
+					<img src="http://www.gravatar.com/avatar/ae8bfeb002bf86d989cab8c93e0794c6.png?s=36" alt="Gravatar" style="float: left; margin: 0 15px 0 0;">
+					<p>Best regards,<br>&mdash; Fredrik Karlström</p>
+	
+					<h3>Licence</h3>
+					<pre>
 Copyright (c) 2014 Fredrik Karlström
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -215,6 +291,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 </pre>
 
+			</div>
 		</div>
 
 		<script src="options.js"></script>

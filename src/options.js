@@ -140,9 +140,60 @@ function add_referrer_route() {
 	add_table_row(table, refInput, pathInput);
 }
 
+function options_setup() {
+	var cont   = document.getElementById('wrap');
+	var navs   = cont.querySelectorAll('ul#nav li');
+	var tabs   = cont.querySelectorAll('.tab');
+	var active = 'routing';
+
+	// Handle new installations by showing the usage instructions and a quick message
+	if(!localStorage.getItem('dr_mime_map')) {
+		active = 'usage';
+
+		var status = document.getElementById('status');
+		status.innerHTML = 'Thank you for installing Downloads Router!<br>Please read the instructions below, then head over to the Routing rules to configure the extension.';
+		status.style.display = 'block';
+		setTimeout(function() {
+			status.innerHTML = '';
+			status.style.display = 'none';
+		}, 7500);
+	}
+
+	navs[0].parentNode.dataset.current = active;
+
+	for(var i = 0; i < tabs.length; i++) {
+		if(tabs[i].id != active) {
+			tabs[i].style.display = 'none';
+		}
+
+		navs[i].onclick = handle_click;
+		if(navs[i].dataset.tab == active) {
+			navs[i].setAttribute('class', 'active');
+		}
+	}
+
+	restore_options();
+}
+
+function handle_click() {
+	var current  = this.parentNode.dataset.current;
+	var selected = this.dataset.tab;
+
+	if(current == selected) {
+		return;
+	}
+
+	document.getElementById(current).style.display  = 'none';
+	document.getElementById(selected).style.display = 'block';
+	document.getElementById('nav_' + current).removeAttribute('class', 'active');
+
+	this.setAttribute('class', 'active');
+	this.parentNode.dataset.current = selected;
+}
+
 /* Event listeners */
 
-document.addEventListener('DOMContentLoaded', restore_options);
+document.addEventListener('DOMContentLoaded', options_setup);
 document.querySelector('#save').addEventListener('click', save_options);
 document.querySelector('#add_mime_route').addEventListener('click', add_mime_route);
 document.querySelector('#add_referrer_route').addEventListener('click', add_referrer_route);
