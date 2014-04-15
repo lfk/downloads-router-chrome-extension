@@ -49,7 +49,7 @@
 				padding: 10px;
 				cursor: pointer;
 			} button.btn, button.btn2 {
-				background-color: #333;
+				background-color: #6d6d6d;
 				color: #fff;
 				transition: .2s ease;
 				padding: 13px 0;
@@ -164,7 +164,7 @@
 							<tr><th>Filetype (MIME)</th><th></th><th>Destination folder</th><th></th></tr>
 						</thead>
 						<tbody>
-						<tr><td colspan="4"><button id="add_mime_route" class="btn"><strong>+</strong> Add new routing rule</button></td></tr>
+							<tr><td colspan="4"><button id="add_mime_route" class="btn"><strong>+</strong> Add new routing rule</button></td></tr>
 						</tbody>
 					</table>
 	
@@ -174,10 +174,21 @@
 							<tr><th>Source domain</th><th></th><th>Destination folder</th><th></th></tr>
 						</thead>
 						<tbody>
-						<tr><td colspan="4"><button id="add_referrer_route" class="btn"><strong>+</strong> Add new routing rule</button></td></tr>
+							<tr><td colspan="4"><button id="add_referrer_route" class="btn"><strong>+</strong> Add new routing rule</button></td></tr>
 						</tbody>
 					</table>
 					<p class="note">* Please note that larger websites often utilize Content Distribution Networks, which means that the referrer for a certain image might not be the same as the domain of the website you are visiting. Facebook, for instance, uses the Akamai network to serve images.</p>
+
+					<h2>Filename &#8680; folder mapping</h2>
+					<table id="filename_mapping_table">
+						<thead>
+							<tr><th>Filename keyword</th><th></th><th>Destination folder</th><th></th></tr>
+						</thead>
+						<tbody>
+							<tr><td colspan="4"><button id="add_filename_route" class="btn"><strong>+</strong> Add new routing rule</button></td></tr>
+						</tbody>
+					</table>
+					<p class="note">* Keywords are case-insensitive, recommended basic usage is a single keyword per rule. Further guidelines are available on the "Usage instructions" page. The keyword is treated directly as a regular expression &mdash; feel free to experiment.</p>
 
 					<button id="save" class="btn2">&#10004; Save configuration</button>
 
@@ -197,6 +208,17 @@
 						</tbody>
 					</table>
 
+					<h2>Advanced filename keywords</h2>
+					<p class="note">A few helpful tricks for more powerful filename-based routing.</p>
+					<table id="advanced_keywords">
+						<tbody>
+							<tr><td>a|b</td><td>"|" is an else operator<br><span class="note">Matches "a" or "b".</span></td></tr>
+							<tr><td>a.b</td><td>"." is a single-character wildcard<br><span class="note">Matches "a-b", "a_b", "a b", etc.</span></td></tr>
+							<tr><td>a.*b</td><td>".*" multi-character wildcard<br><span class="note">Matches "a" followed by <strong>anything</strong> then followed by "b".</span></td></tr>
+						</tbody>
+					</table>
+
+
 					<h2>Troubleshooting</h2>
 					<p class="note">Not working as intended? Here's some common issues.<br>Please get in touch if you think your trouble lies elsewhere!</em></p>
 
@@ -208,14 +230,34 @@
 					<ul>
 						<li>Some websites serve binary content as "octet-streams," thereby hiding the correct MIME-type. The plugin automatically attempts to match common extensions, but this approach will not cover all cases. Domain-based routing could serve as a workaround in many cases.</li>
 					</ul>
-
-
+					<h5>Filename-based routing</h5>
+					<ul>
+						<li>"Greedy" matches, i.e. too general keywords matching on unintended downloads, or invalid regular expressions would be two common error causes. For the latter, check the console and/or the extension background page for debugging information.</li>
+					</ul>
 				</div>
+
+
 				<div class="tab" id="usage">
 					<h1>Usage instructions</h1>
 					<p>Configure where Chrome should save your downloaded files based on file type or source domain.</p>
-					<p>The MIME type routes are the most basic routes; they are superseeded by any matching domain-based rule. Right-clicking and selecting "Save As&hellip;" works the same as always, overriding any and all matching rules.</p>
-					<p>Some operating system-specific rules apply, as follows:</p>
+					<p>The MIME type routes are the most basic routes; they are superseeded by any matching domain-based rule, which in turn is superseeded by any matching filename-based rule. Right-clicking and selecting "Save As&hellip;" works the same as always, overriding any and all matching rules.</p>
+
+					<h3>Routing rule hierarchy</h3>
+					<ol>
+						<li>Right-click, "Save As&hellip;"</li>
+						<li>Filename-based routing rules</li>
+						<li>Domain-based routing rules</li>
+						<li>MIME-based routing rules</li>
+						<li>Browser default</li>
+					</ol>
+
+					<h3>Filename-based routing</h3>
+					<p>Route to target folder based on case-<em>insensitive</em> keyword(s) in the filename. Please note that the matching is performed on a <strong>substring</strong> level, meaning that, for instance, the keyword "jet" would trigger the rule on downloads with filenames like "jetski" or "jumbojet."</p>
+					<p>You may use the "or" operator | to route a file containing <em>either</em> "ebook" or "epub" by specifying "ebook|epub".</p>
+					<p>The period (.) is used as a wildcard matching any single character, including whitespaces, dashes, and so forth. Thus, "some.keyword" would match "some keyword" as well as "some_keyword".
+					Powerusers may attempt to write more advanced regular expressions, but such usage has not been tested.</p>
+
+					<h3>Operating system-specific information</h3>
 					<dl>
 						<dt>Windows</dt>
 						<dd>

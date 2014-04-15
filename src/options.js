@@ -1,8 +1,9 @@
 function save_options() {
-	var maps = [{}, {}];
+	var maps = [{}, {}, {}];
 	var tables = [
 		document.getElementById('mime_mapping_table').getElementsByTagName('tbody')[0],
-		document.getElementById('referrer_mapping_table').getElementsByTagName('tbody')[0]
+		document.getElementById('referrer_mapping_table').getElementsByTagName('tbody')[0],
+		document.getElementById('filename_mapping_table').getElementsByTagName('tbody')[0]
 	];
 
 	for(var idx in tables) {
@@ -10,7 +11,6 @@ function save_options() {
 			fields = tables[idx].rows[i].getElementsByTagName('input');
 			if(fields[0].value != '' && fields[1].value != '') {
 				target_directory = check_trailing(fields[1].value);
-				//maps[idx][fields[0].value] = fields[1].value;
 				maps[idx][fields[0].value] = target_directory;
 			}
 		}
@@ -18,6 +18,7 @@ function save_options() {
 
 	localStorage.setItem('dr_mime_map', JSON.stringify(maps[0]));
 	localStorage.setItem('dr_referrer_map', JSON.stringify(maps[1]));
+	localStorage.setItem('dr_filename_map', JSON.stringify(maps[2]));
 
 	// Flash a status message
 	var status = document.getElementById('status');
@@ -32,58 +33,65 @@ function save_options() {
 function restore_options() {
 	/* Could do with a bit of a cleanup.. */
 
+	var tables = [
+		document.getElementById('mime_mapping_table').getElementsByTagName('tbody')[0],
+		document.getElementById('referrer_mapping_table').getElementsByTagName('tbody')[0],
+		document.getElementById('filename_mapping_table').getElementsByTagName('tbody')[0]
+	];
+
+	var maps = [
+		'dr_mime_map',
+		'dr_referrer_map',
+		'dr_filename_map'
+		/*
+		localStorage.getItem('dr_mime_map'),
+		localStorage.getItem('dr_referrer_map'),
+		localStorage.getItem('dr_filename_map')
+		*/
+	];
+
+	/*
 	var mime_table = document.getElementById('mime_mapping_table').getElementsByTagName('tbody')[0];
 	var ref_table  = document.getElementById('referrer_mapping_table').getElementsByTagName('tbody')[0];
+	var fn_table   = document.getElementById('filename_mapping_table').getElementsByTagName('tbody')[0];
+
 	var mime_map   = localStorage.getItem('dr_mime_map');
 	var ref_map    = localStorage.getItem('dr_referrer_map');
+	var fn_map     = localStorage.getItem('dr_filename_map');
+	*/
+	
+	var map_defaults = [
+		{ 'image/jpeg': 'images/', 'application/x-bittorrent': 'torrents/' },
+		{},
+		{}
+	];
 
-	if(mime_map) {
-		mime_map = JSON.parse(mime_map);
-	} else {
-		mime_map = { 'image/jpeg': 'images/', 'application/x-bittorrent': 'torrents/' };
-		localStorage.setItem('dr_mime_map', JSON.stringify(mime_map));
-	}
+	for(var idx = 0; idx < maps.length; ++idx) {
+		// Restore or create mapping table
+		
+		var map = localStorage.getItem(maps[idx]);
+		if(map) {
+			map = JSON.parse(map);
+		} else {
+			map = map_defaults[idx];
+			localStorage.setItem(maps[idx], JSON.stringify(map));
+		}
 
-	if(ref_map) {
-		ref_map = JSON.parse(ref_map);
-	} else {
-		ref_map = {};
-		localStorage.setItem('dr_referrer_map', JSON.stringify(ref_map));
-	}
+		// Create HTML table elements for corresponding map
 
-	for(var key in mime_map) {
-		var mimeInput         = document.createElement('input');
-		mimeInput.type        = 'text';
-		mimeInput.value       = key;
-		mimeInput.placeholder = key;
+		for(var key in map) {
+			var input         = document.createElement('input');
+			input.type        = 'text';
+			input.value       = key;
+			input.placeholder = key;
 
-		var pathInput         = document.createElement('input');
-		pathInput.type        = 'text';
-		pathInput.value       = mime_map[key];
-		pathInput.placeholder = mime_map[key];
-		/* 
-		 * [2014-02-16] This causes Chromium 32.0.1700.107 (248368) to crash...
-		 *
-		 * pathInput.type = 'file';
-		 * pathInput.webkitdirectory = true;
-		 * pathInput.multiple = true;
-		 */
+			var path          = document.createElement('input'); // type = 'file' error explanation here
+			path.type         = 'text';
+			path.value        = map[key];
+			path.placeholder  = map[key];
 
-		add_table_row(mime_table, mimeInput, pathInput);
-	}
-
-	for(var key in ref_map) {
-		var refInput          = document.createElement('input');
-		refInput.type         = 'url';
-		refInput.value        = key;
-		refInput.placeholder  = key;
-
-		var pathInput         = document.createElement('input');
-		pathInput.type        = 'text';
-		pathInput.value       = ref_map[key];
-		pathInput.placeholder = ref_map[key];
-
-		add_table_row(ref_table, refInput, pathInput);
+			add_table_row(tables[idx], input, path);
+		}
 	}
 }
 
@@ -148,8 +156,20 @@ function add_mime_route() {
 function add_referrer_route() {
 	var table             = document.getElementById('referrer_mapping_table').getElementsByTagName('tbody')[0];
 	var refInput          = document.createElement('input');
-	refInput.type         = 'url';
+	refInput.type         = 'text';
 	refInput.placeholder  = 'E.g. 9gag.com (no http://)';
+	var pathInput         = document.createElement('input');
+	pathInput.type        = 'text';
+	pathInput.placeholder = 'some/folder/';
+
+	add_table_row(table, refInput, pathInput);
+}
+
+function add_filename_route() {
+	var table             = document.getElementById('filename_mapping_table').getElementsByTagName('tbody')[0];
+	var refInput          = document.createElement('input');
+	refInput.type         = 'text';
+	refInput.placeholder  = 'E.g. epub|ebook';
 	var pathInput         = document.createElement('input');
 	pathInput.type        = 'text';
 	pathInput.placeholder = 'some/folder/';
@@ -214,3 +234,4 @@ document.addEventListener('DOMContentLoaded', options_setup);
 document.querySelector('#save').addEventListener('click', save_options);
 document.querySelector('#add_mime_route').addEventListener('click', add_mime_route);
 document.querySelector('#add_referrer_route').addEventListener('click', add_referrer_route);
+document.querySelector('#add_filename_route').addEventListener('click', add_filename_route);

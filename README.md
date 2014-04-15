@@ -12,6 +12,12 @@ to establish routing rules, directing downloads to folders based on filetypes an
 Changelog
 ---------
 
+### 0.6 (April 14, 2014)
+
+* Filename-based routing option added
+* Update usage instructions
+* Streamlined map unpacking and table code generation in options.js
+
 ### 0.5 (March 03, 2014)
 
 * Tabbed interface for the configuration page
