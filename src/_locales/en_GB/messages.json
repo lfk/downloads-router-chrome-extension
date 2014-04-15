@@ -5,4 +5,8 @@
 	"appDesc": {
 		"message": "Organise your downloads automatically! Set custom download locations based on file type or source domain."
 	}
+
+	"msg_saved": {
+		"message": "Settings saved!"
+	}
 }

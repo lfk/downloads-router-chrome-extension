@@ -23,6 +23,7 @@ function save_options() {
 	// Flash a status message
 	var status = document.getElementById('status');
 	status.innerHTML = '<span class="green">&#10004;</span> Settings saved!';
+	//status.innerHTML = '<span class="green">&#10004;</span>' + chrome.i18n.getMessage('msg_saved');
 	status.style.display = 'block';
 	setTimeout(function() {
 		status.innerHTML = '';
@@ -31,8 +32,6 @@ function save_options() {
 }
 
 function restore_options() {
-	/* Could do with a bit of a cleanup.. */
-
 	var tables = [
 		document.getElementById('mime_mapping_table').getElementsByTagName('tbody')[0],
 		document.getElementById('referrer_mapping_table').getElementsByTagName('tbody')[0],
@@ -43,23 +42,8 @@ function restore_options() {
 		'dr_mime_map',
 		'dr_referrer_map',
 		'dr_filename_map'
-		/*
-		localStorage.getItem('dr_mime_map'),
-		localStorage.getItem('dr_referrer_map'),
-		localStorage.getItem('dr_filename_map')
-		*/
 	];
 
-	/*
-	var mime_table = document.getElementById('mime_mapping_table').getElementsByTagName('tbody')[0];
-	var ref_table  = document.getElementById('referrer_mapping_table').getElementsByTagName('tbody')[0];
-	var fn_table   = document.getElementById('filename_mapping_table').getElementsByTagName('tbody')[0];
-
-	var mime_map   = localStorage.getItem('dr_mime_map');
-	var ref_map    = localStorage.getItem('dr_referrer_map');
-	var fn_map     = localStorage.getItem('dr_filename_map');
-	*/
-	
 	var map_defaults = [
 		{ 'image/jpeg': 'images/', 'application/x-bittorrent': 'torrents/' },
 		{},
@@ -68,7 +52,6 @@ function restore_options() {
 
 	for(var idx = 0; idx < maps.length; ++idx) {
 		// Restore or create mapping table
-		
 		var map = localStorage.getItem(maps[idx]);
 		if(map) {
 			map = JSON.parse(map);
@@ -78,7 +61,6 @@ function restore_options() {
 		}
 
 		// Create HTML table elements for corresponding map
-
 		for(var key in map) {
 			var input         = document.createElement('input');
 			input.type        = 'text';
