@@ -19,7 +19,6 @@ chrome.downloads.onDeterminingFilename.addListener(function(downloadItem, sugges
 	/* Referrer-based mapping */
 	ref_map = JSON.parse(localStorage.getItem('dr_referrer_map'));
 
-	console.log(ref_map);
 	if(Object.keys(ref_map).length) {
 		var matches    = downloadItem.referrer.match(/^https?\:\/\/([^\/:?#]+)(?:[\/:?#]|$)/i);
 		var ref_domain = matches && matches[1];
