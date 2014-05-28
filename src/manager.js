@@ -43,6 +43,7 @@ chrome.downloads.onDeterminingFilename.addListener(function(downloadItem, sugges
 			'zip': 'application/zip',
 			'png': 'image/png',
 			'jpg': 'image/jpeg',
+			'exe': 'application/exe',
 			'avi': 'video/x-msvideo'
 		};
 

@@ -3,7 +3,7 @@
 		"message": "Enrutador de Descargas"
 	},
 	"appDesc": {
-		"message": "Organize tus descargas automaticamente basado en tipo de archivo o dominio de origen."
+		"message": "Organize tus descargas automaticamente basado en nombre o tipo de archivo, o dominio de origen."
 	},
 
 	"msg_saved": {

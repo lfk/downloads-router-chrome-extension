@@ -3,7 +3,7 @@
 		"message": "Downloads Router"
 	},
 	"appDesc": {
-		"message": "Organize your downloads automatically! Set custom download locations based on file type or source domain."
+		"message": "Organize your downloads automatically! Set custom download locations based on filetype, filename, or source domain."
 	},
 
 	"msg_saved": {

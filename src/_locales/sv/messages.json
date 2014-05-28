@@ -3,7 +3,7 @@
 		"message": "Downloads Router"
 	},
 	"appDesc": {
-		"message": "Sortera dina nedladdningar automatiskt per filtyp eller ursprungsdomän."
+		"message": "Sortera dina nedladdningar automatiskt per filtyp, filnamn, eller ursprungsdomän."
 	},
 	"msg_saved": {
 		"message": "Inställningarna har sparats!"
