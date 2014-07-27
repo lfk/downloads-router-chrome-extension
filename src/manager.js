@@ -25,7 +25,8 @@ rulesets['referrer'] = function(downloadItem, suggest) {
 
 	if(Object.keys(ref_map).length) {
 		var matches    = downloadItem.referrer.match(/^https?\:\/\/([^\/:?#]+)(?:[\/:?#]|$)/i);
-		var ref_domain = matches && matches[1];
+		var ref_domain = matches && matches[1].replace(/^www\./i, '');
+
 
 		if(ref_map[ref_domain]) {
 			suggest({ filename: ref_map[ref_domain] + downloadItem.filename });

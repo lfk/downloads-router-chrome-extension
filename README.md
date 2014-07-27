@@ -12,6 +12,12 @@ to establish routing rules, directing downloads to folders based on filetype, fi
 Changelog
 ---------
 
+### 0.7 (July 26, 2014)
+
+* Custom ruleset order added
+* Tweaked referrer-based routing behavior to exclude the www subdomain
+* Improved usage instructions and removed erroneous (outdated) information
+
 ### 0.6 (April 14, 2014)
 
 * Filename-based routing option added

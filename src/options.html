@@ -153,19 +153,12 @@
 				<div class="tab" id="routing">
 					<h1>Routing rules</h1>
 
+					<p>Please provide destination folders delimited by forward slash (/).<br>
+					Destinations must be located within the base downloads folder; use symbolic links to circumvent this restriction (see usage instructions).</p>
+
 					<h2>Rule execution hierarchy</h2>
 					<p>Specify the order in which you would like the tables taversed.<br><em>Default is filename, referrer, mime.</em></p>
 					<input type="text" id="rule_order" name="rule_order" value="" placeholder="filename, referrer, mime">
-
-					<!--
-					<table id="rule_order">
-						<tbody>
-							<tr><th>Filetype</th><td><</td></tr>
-							<tr><th>Referrer</th><td></td></tr>
-							<tr><th>MIME-type</th><td></td></tr>
-						</tbody>
-					</table>
-					-->
 
 					<h2>Filetype &#8680; folder mapping</h2>
 					<table id="mime_mapping_table">
@@ -186,7 +179,10 @@
 							<tr><td colspan="4"><button id="add_referrer_route" class="btn"><strong>+</strong> Add new routing rule</button></td></tr>
 						</tbody>
 					</table>
-					<p class="note">* Please note that larger websites often utilize Content Distribution Networks, which means that the referrer for a certain image might not be the same as the domain of the website you are visiting. Facebook, for instance, uses the Akamai network to serve images.</p>
+					<ul class="note">
+						<li>Do not include http:// or www. Other subdomains, such as images.domain.com, <strong>are</strong> required.</li>
+						<li>Larger websites often utilize Content Distribution Networks, which means that the referrer for a certain image might not be the same as the domain of the website you are visiting. Facebook, for instance, uses the Akamai network to serve images.</li>
+					</ul>
 
 					<h2>Filename &#8680; folder mapping</h2>
 					<table id="filename_mapping_table">
@@ -197,7 +193,7 @@
 							<tr><td colspan="4"><button id="add_filename_route" class="btn"><strong>+</strong> Add new routing rule</button></td></tr>
 						</tbody>
 					</table>
-					<p class="note">* Keywords are case-insensitive, recommended basic usage is a single keyword per rule. Further guidelines are available on the "Usage instructions" page. The keyword is treated directly as a regular expression &mdash; feel free to experiment.</p>
+					<p class="note">* Keywords are case-insensitive. Recommended basic usage is a single keyword per rule. Further guidelines are available on the "Usage instructions" page. The keyword is treated directly as a regular expression &mdash; feel free to experiment.</p>
 
 					<button id="save" class="btn2">&#10004; Save configuration</button>
 
@@ -232,85 +228,110 @@
 				<div class="tab" id="usage">
 					<h1>Usage instructions</h1>
 
-					<p>Downloads Router lets you filter downloads by MIME type, file name, and source domain.</p>
+					<h2>Important information</h2>
+					<p>Due to security concerns (see the <a href="https://developer.chrome.com/extensions/downloads#method-download">chrome.downloads API</a>), Chrome extensions are only allowed to download files to targets <strong>within the default downloads directory</strong>.
+					You may manually circumvent this restriction by creating a "symbolic link" (<a href="http://www.howtogeek.com/howto/16226/complete-guide-to-symbolic-links-symlinks-on-windows-or-linux/">more info</a>)
+					from within the downloads directory to any other direction on your harddrive(s).</p>
+
+					<h3>Symlinks on Windows (XP, Vista, 7, 8)</h3>
+
+					<ol>
+						<li>Open the command prompt (cmd.exe) as Administrator<br><em>Search for cmd in the start menu, right-click and choose 'Run as Administrator'</em></li>
+						<li>Create the symbolic link: <strong>mklink /D TARGET LINK</strong><br><em>Substitute TARGET for the link name within Downloads, and LINK to your desired download destination</em>
+							<ul>
+								<li>Example: <em>mklink /D "C:\Users\MyName\Downloads\Music" "D:\Music"</em></li>
+							</ul>
+						</li>
+						<li>Configure Downloads Router, setting your Destination folder to TARGET.
+							<ul>
+								<li>Example: Filetype (MIME) = <em>audio/mpeg</em>, Destination folder = <em>Music/</em></li>
+							</ul>	
+						</li>
+					</ol>
+
+					<h3>Symlinks on Linux and Mac</h3>
+
+					<ol>
+						<li>Open a terminal</li>
+						<li>Create the symbolic link: <strong>ln -s TARGET LINK_NAME</strong><br><em>TARGET is your desired download destination, LINK_NAME is the link within Downloads</em>
+							<ul>
+								<li>Example: <em>ln -s /home/myname/music /home/myname/Downloads/music</em></li>
+							</ul>
+						</li>
+						<li>Configure Downloads Router, setting your Destination folder to LINK_NAME.
+							<ul>
+								<li>Example: Filetype (MIME) = <em>audio/mpeg</em>, Destination folder = <em>music/</em></li>
+							</ul>	
+						</li>
+					</ol>
+
+					<p>Downloads Router's configuration (paths and rules) <strong>never</strong> require quotation marks.</p>
 
 
-					<!--
-					<h3>Rule hierarchy</h3>
+
+					<h2>Referrer routing</h2>
+
+					<p>A referrer is a website, such as <em>facebook.com</em> or <em>9gag.com</em>.</p>
+					<p>You do not need to provide the protocol prefix (http://), nor the <em>www</em> subdomain.
+					Any other subdomain, however, such as <em>images.domain.com</em>, IS a required part of the "source domain" field.</p>
+
+					<p>Please note that some larger websites, such as Facebook, utilize Content Distribution Networks, which means that the
+					referrer of the file you wish to download is a different domain. To verify if this is the case, right-click the
+					element in question and check the source of the file.</p>
+
+
+
+					<h2>Filetype (MIME) routing</h2>
+
+					<p>The MIME type is an identifier of the type of data that a file contains, and thus somewhat different from an extension (such as .pdf, or .png).</p>
+					<p>The routing rules page provides a table with some common MIME types, and a more <a href="http://en.wikipedia.org/wiki/Internet_media_type#List_of_common_media_types">exhaustive list can be found on Wikipedia</a>.
+
+					<p>Sometimes web servers distribute files as <em>application/octet-stream</em> rather than the "correct" MIME-type. Workarounds for the most common types have been implemented and should solve this issue automatically, 
+					but if you encounter problems, please attempt to use either of the other routing options to avoid this issue.</p>
+
+
+
+					<h2>Filename routing</h2>
+
+					<p>Route to target folder based on <strong>case-insensitive</strong> keyword(s) in the filename, using <strong>regular expressions</strong>.</p>
+
+					<p>Please note that the matching is performed on a <em>substring</em> level, meaning that, for instance, the keyword "jet" would trigger the rule on downloads with filenames like "jetski" or "jumbojet."</p>
+
+					<p>The asterisk (*) is <strong>not</strong> used as a wildcard on its own, as is common in search engines; in regular expressions, it means "the previous statement zero or more times."</p>
+
+					<p>You may use the "or" operator | to route a file containing <em>either</em> "ebook" or "epub" by specifying "ebook|epub".</p>
+					<p>The period (.) is used as a wildcard matching any single character, including whitespaces, dashes, and so forth. Thus, "some.keyword" would match "some keyword" as well as "some_keyword".
+					Powerusers may attempt to write more advanced regular expressions, but such usage has not been tested.</p>
+
+					<h4>A note on back references</h4>
+					<p>At the present, Downloads Router does <strong>not</strong> support back references for automatically creating new downloads folders. This might be implemented in future versions.</p>
+
+
 
 					<h2>Troubleshooting</h2>
-					<p class="note">Not working as intended? Here's some common issues.<br>Please get in touch if you think your trouble lies elsewhere!</em></p>
+					<p class="note">Not working as intended? Here's some common issues. Please get in touch if you think your trouble lies elsewhere!</em></p>
+
+					<h5>Files not downloading to the given destination directory</h5>
+					<ul>
+						<li>The most common error is an invalid download path, such as a path outside of the downloads folder.<br>
+						Open the extension's background page (chrome://extensions &gt; background page) and attempt to download the file again with the "Console" tab open.
+						The following message indicates an invalid target path: <em>Error in respose handler for downloadsInternal.determineFilename: Invalid filename at &hellip;</em></li>
+					</ul>
 
 					<h5>Domain-based routing</h5>
 					<ul>
 						<li>Some websites serve content through other domains than what is visible in the Omnibar. To verify if this might be your issue, right-click the item and "inspect" it &ndash; look for other domains in the highlighted area.</li>
 					</ul>
+
 					<h5>MIME-based routing</h5>
 					<ul>
 						<li>Some websites serve binary content as "octet-streams," thereby hiding the correct MIME-type. The plugin automatically attempts to match common extensions, but this approach will not cover all cases. Domain-based routing could serve as a workaround in many cases.</li>
 					</ul>
+
 					<h5>Filename-based routing</h5>
 					<ul>
 						<li>"Greedy" matches, i.e. too general keywords matching on unintended downloads, or invalid regular expressions would be two common error causes. For the latter, check the console and/or the extension background page for debugging information.</li>
 					</ul>
-
-
-					<p>chrome://extensions &gt; background page, shows error?</p>
-					<p>Error in respose handler for downloadsInternal.determineFilename: Invalid filename at &hellip;</p>
-
-
-					<p>Configure where Chrome should save your downloaded files based on file type or source domain.</p>
-					<p>The MIME type routes are the most basic routes; they are superseeded by any matching domain-based rule, which in turn is superseeded by any matching filename-based rule. Right-clicking and selecting "Save As&hellip;" works the same as always, overriding any and all matching rules.</p>
-
-					<h3>Routing rule hierarchy</h3>
-					<ol>
-						<li>Right-click, "Save As&hellip;"</li>
-						<li>Filename-based routing rules</li>
-						<li>Domain-based routing rules</li>
-						<li>MIME-based routing rules</li>
-						<li>Browser default</li>
-					</ol>
-
-					<h3>Filename-based routing</h3>
-					<p>Route to target folder based on case-<em>insensitive</em> keyword(s) in the filename. Please note that the matching is performed on a <strong>substring</strong> level, meaning that, for instance, the keyword "jet" would trigger the rule on downloads with filenames like "jetski" or "jumbojet."</p>
-					<p>You may use the "or" operator | to route a file containing <em>either</em> "ebook" or "epub" by specifying "ebook|epub".</p>
-					<p>The period (.) is used as a wildcard matching any single character, including whitespaces, dashes, and so forth. Thus, "some.keyword" would match "some keyword" as well as "some_keyword".
-					Powerusers may attempt to write more advanced regular expressions, but such usage has not been tested.</p>
-
-					<h3>Operating system-specific information</h3>
-					<dl>
-						<dt>Windows</dt>
-						<dd>
-							<ul>
-								<li>Allows absolute paths ("C:\Users\YourName\Desktop\")</li>
-								<li>Allows relative paths ("Torrents/")</li>
-								<li>Allows both forward and backward slash as delimiting characters</li>
-							</ul>
-						</dd>
-						<dt>Mac OS X</dt>
-						<dd>
-							<ul>
-								<li>Allows absolute paths ("/Users/YourName/Pictures/")</li>
-								<li>Allows relative paths ("References/")
-								<li>Forward slash as delimiting character</li>
-							</ul>
-						</dd>
-						<dt>Linux</dt>
-						<dd>
-							<ul>
-								<li>Paths must be <em>relative</em> to your default Downloads folder</li>
-								<li>Destination folders <em>must</em> be located within your default Downloads folder
-								<ul>
-									<li>You may work around this limitation by creating <a href="http://en.wikipedia.org/wiki/Symbolic_link">symbolic links</a> within your Downloads folder</li>
-								</ul></li>
-
-								<li>Forward slash as delimiting character</li>
-							</ul>
-						</dd>
-					</dl>
-
-					<p class="note"><strong>Note:</strong> According to the <a href="https://developer.chrome.com/extensions/downloads#method-download">chrome.downloads API</a>, extensions should only be able to suggest paths relative to the default Downloads directory. Currently, however, absolute paths are adhered in Windows and OS X. This might change in future versions of Chrome.</p>
-					-->
 				</div>
 
 				<div class="tab" id="about">
