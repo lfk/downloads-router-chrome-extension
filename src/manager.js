@@ -1,6 +1,7 @@
-chrome.downloads.onDeterminingFilename.addListener(function(downloadItem, suggest) {
+var order = JSON.parse(localStorage.getItem('dr_order'));
+var rulesets = {};
 
-	/* Filename-based mapping */
+rulesets['filename'] = function(downloadItem, suggest) {
 	filename_map = JSON.parse(localStorage.getItem('dr_filename_map'));
 
 	var keys = Object.keys(filename_map);
@@ -11,12 +12,15 @@ chrome.downloads.onDeterminingFilename.addListener(function(downloadItem, sugges
 			matches = regex.exec(downloadItem.filename);
 			if(matches) {
 				suggest({ filename: filename_map[keys[idx]] + downloadItem.filename });
-				return;
+				return true;
 			}
 		}
 	}
 
-	/* Referrer-based mapping */
+	return false;
+}
+
+rulesets['referrer'] = function(downloadItem, suggest) {
 	ref_map = JSON.parse(localStorage.getItem('dr_referrer_map'));
 
 	if(Object.keys(ref_map).length) {
@@ -25,11 +29,14 @@ chrome.downloads.onDeterminingFilename.addListener(function(downloadItem, sugges
 
 		if(ref_map[ref_domain]) {
 			suggest({ filename: ref_map[ref_domain] + downloadItem.filename });
-			return;
+			return true;
 		}
 	}
 
-	/* MIME-based mapping */
+	return false;
+}
+
+rulesets['mime'] = function(downloadItem, suggest) {
 	mime_map  = JSON.parse(localStorage.getItem('dr_mime_map'));
 	mime_type = downloadItem.mime;    
 
@@ -53,11 +60,26 @@ chrome.downloads.onDeterminingFilename.addListener(function(downloadItem, sugges
 	}
 
 	folder = mime_map[mime_type];
-	if(!folder) {
-		return;
+	if(folder) {
+		suggest({ filename: folder + downloadItem.filename });
+		return true;
 	}
 
-	suggest({ filename: folder + downloadItem.filename });
+	return false;
+}
+
+
+
+chrome.downloads.onDeterminingFilename.addListener(function(downloadItem, suggest) {
+	var done = false;
+
+	order.every(function(idx) {
+		done = rulesets[idx](downloadItem, suggest);
+		if(done) {
+			return false;
+		}
+		return true; // Somewhat abusing the .each() prototype, but it works.
+	});
 });
 
 if(!localStorage.getItem('dr_mime_map')) {

@@ -29,11 +29,12 @@
 			} .tab h1 {
 				text-transform: uppercase;
 				font-size: 1.6em;
-				color: #5075ce;
 				font-weight: 200;
+				color: #000;
 			} h2 {
 				font-size: 1.5em;
 				font-weight: 400;
+				color: #5075ce;
 			} h3, th {
 				font-size: 1.25em;
 				font-weight: normal;
@@ -152,6 +153,20 @@
 				<div class="tab" id="routing">
 					<h1>Routing rules</h1>
 
+					<h2>Rule execution hierarchy</h2>
+					<p>Specify the order in which you would like the tables taversed.<br><em>Default is filename, referrer, mime.</em></p>
+					<input type="text" id="rule_order" name="rule_order" value="" placeholder="filename, referrer, mime">
+
+					<!--
+					<table id="rule_order">
+						<tbody>
+							<tr><th>Filetype</th><td><</td></tr>
+							<tr><th>Referrer</th><td></td></tr>
+							<tr><th>MIME-type</th><td></td></tr>
+						</tbody>
+					</table>
+					-->
+
 					<h2>Filetype &#8680; folder mapping</h2>
 					<table id="mime_mapping_table">
 						<thead>
@@ -212,7 +227,16 @@
 							<tr><td>a.*b</td><td>".*" multi-character wildcard<br><span class="note">Matches "a" followed by <strong>anything</strong> then followed by "b".</span></td></tr>
 						</tbody>
 					</table>
+				</div>
 
+				<div class="tab" id="usage">
+					<h1>Usage instructions</h1>
+
+					<p>Downloads Router lets you filter downloads by MIME type, file name, and source domain.</p>
+
+
+					<!--
+					<h3>Rule hierarchy</h3>
 
 					<h2>Troubleshooting</h2>
 					<p class="note">Not working as intended? Here's some common issues.<br>Please get in touch if you think your trouble lies elsewhere!</em></p>
@@ -229,11 +253,12 @@
 					<ul>
 						<li>"Greedy" matches, i.e. too general keywords matching on unintended downloads, or invalid regular expressions would be two common error causes. For the latter, check the console and/or the extension background page for debugging information.</li>
 					</ul>
-				</div>
 
 
-				<div class="tab" id="usage">
-					<h1>Usage instructions</h1>
+					<p>chrome://extensions &gt; background page, shows error?</p>
+					<p>Error in respose handler for downloadsInternal.determineFilename: Invalid filename at &hellip;</p>
+
+
 					<p>Configure where Chrome should save your downloaded files based on file type or source domain.</p>
 					<p>The MIME type routes are the most basic routes; they are superseeded by any matching domain-based rule, which in turn is superseeded by any matching filename-based rule. Right-clicking and selecting "Save As&hellip;" works the same as always, overriding any and all matching rules.</p>
 
@@ -285,6 +310,7 @@
 					</dl>
 
 					<p class="note"><strong>Note:</strong> According to the <a href="https://developer.chrome.com/extensions/downloads#method-download">chrome.downloads API</a>, extensions should only be able to suggest paths relative to the default Downloads directory. Currently, however, absolute paths are adhered in Windows and OS X. This might change in future versions of Chrome.</p>
+					-->
 				</div>
 
 				<div class="tab" id="about">

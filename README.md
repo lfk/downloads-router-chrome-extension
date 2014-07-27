@@ -6,7 +6,7 @@ to establish routing rules, directing downloads to folders based on filetype, fi
 
 * [Chrome web store listing][webstore]
 
-[webstore]: https://chrome.google.com/webstore/detail/downloads-router/fgkboeogiiklpklnjgdiaghaiehcknjo]
+[webstore]: https://chrome.google.com/webstore/detail/downloads-router/fgkboeogiiklpklnjgdiaghaiehcknjo
 
 
 Changelog

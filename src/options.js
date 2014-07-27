@@ -20,6 +20,23 @@ function save_options() {
 	localStorage.setItem('dr_referrer_map', JSON.stringify(maps[1]));
 	localStorage.setItem('dr_filename_map', JSON.stringify(maps[2]));
 
+
+	var order = document.getElementById('rule_order').value;
+	order = order.replace(/\s+/g, '');
+	order = order.split(',', 3);
+
+	['filename', 'referrer', 'mime'].every(function(item) {
+		if(order.indexOf(item) == -1) {
+			alert('Invalid ruleset hierarchy, resetting to default.');
+			order = ['filename', 'referrer', 'mime'];
+			return false;
+		}
+
+		return true; // Again, abusing every()
+	}); 
+
+	localStorage.setItem('dr_order', JSON.stringify(order));
+
 	// Flash a status message
 	var status = document.getElementById('status');
 	status.innerHTML = '<span class="green">&#10004;</span> Settings saved!';
@@ -75,6 +92,18 @@ function restore_options() {
 			add_table_row(tables[idx], input, path);
 		}
 	}
+
+	var order = localStorage.getItem('dr_order');
+	if(order) {
+		order = JSON.parse(order);
+	} else {
+		order = ['filename', 'referrer', 'mime'];
+		localStorage.setItem('dr_order', JSON.stringify(order));
+	}
+
+	var order_field = document.getElementById('rule_order');
+	order_field.value = order;
+
 }
 
 function check_trailing(path) {
@@ -170,7 +199,7 @@ function options_setup() {
 		active = 'usage';
 
 		var status = document.getElementById('status');
-		status.innerHTML = 'Thank you for installing Downloads Router!<br>Please read the instructions below, then head over to the Routing rules to configure the extension.';
+		status.innerHTML = 'Thank you for installing Downloads Router!<br>Please read the instructions below, then head over to the routing rules to configure the extension.';
 		status.style.display = 'block';
 		setTimeout(function() {
 			status.innerHTML = '';
