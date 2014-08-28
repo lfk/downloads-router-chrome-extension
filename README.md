@@ -15,6 +15,7 @@ Changelog
 ### 0.8 (August 27, 2014)
 
 * Added the global referrers folder mapping option
+* Tweaked the ``fresh install'' detection mechanism to trigger on updates as well
 
 ### 0.7 (July 26, 2014)
 

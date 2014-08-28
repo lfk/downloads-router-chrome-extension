@@ -88,7 +88,10 @@ chrome.downloads.onDeterminingFilename.addListener(function(downloadItem, sugges
 	});
 });
 
-if(!localStorage.getItem('dr_mime_map')) {
-	// Open the options page directly after installing the extension
+var version = localStorage.getItem('dr_version');
+
+if(!version || version != chrome.runtime.getManifest().version) {
+	// Open the options page directly after installing or updating the extension
 	chrome.tabs.create({ url: "options.html" });
+	localStorage.setItem('dr_version', chrome.runtime.getManifest().version);
 }
