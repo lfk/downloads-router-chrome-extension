@@ -12,6 +12,10 @@ to establish routing rules, directing downloads to folders based on filetype, fi
 Changelog
 ---------
 
+### 0.8 (August 27, 2014)
+
+* Added the global referrers folder mapping option
+
 ### 0.7 (July 26, 2014)
 
 * Custom ruleset order added

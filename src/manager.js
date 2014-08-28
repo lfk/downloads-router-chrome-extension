@@ -27,11 +27,16 @@ rulesets['referrer'] = function(downloadItem, suggest) {
 		var matches    = downloadItem.referrer.match(/^https?\:\/\/([^\/:?#]+)(?:[\/:?#]|$)/i);
 		var ref_domain = matches && matches[1].replace(/^www\./i, '');
 
-
 		if(ref_map[ref_domain]) {
 			suggest({ filename: ref_map[ref_domain] + downloadItem.filename });
 			return true;
 		}
+	}
+
+	if(JSON.parse(localStorage.getItem('dr_global_ref_folders'))) {
+		console.log('Global referrer folders enabled!');
+		suggest({ filename: ref_domain + '/' + downloadItem.filename });
+		return true;
 	}
 
 	return false;
@@ -79,7 +84,7 @@ chrome.downloads.onDeterminingFilename.addListener(function(downloadItem, sugges
 		if(done) {
 			return false;
 		}
-		return true; // Somewhat abusing the .each() prototype, but it works.
+		return true;
 	});
 });
 

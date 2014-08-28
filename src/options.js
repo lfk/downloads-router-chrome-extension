@@ -36,6 +36,8 @@ function save_options() {
 	}); 
 
 	localStorage.setItem('dr_order', JSON.stringify(order));
+	localStorage.setItem('dr_global_ref_folders',
+		JSON.parse(document.querySelector('#global_ref_folders').checked));
 
 	// Flash a status message
 	var status = document.getElementById('status');
@@ -101,9 +103,18 @@ function restore_options() {
 		localStorage.setItem('dr_order', JSON.stringify(order));
 	}
 
-	var order_field = document.getElementById('rule_order');
-	order_field.value = order;
+	document.getElementById('rule_order').value = order;
 
+
+	var global_ref_folders = localStorage.getItem('dr_global_ref_folders');
+	if(global_ref_folders) {
+		global_ref_folders = JSON.parse(global_ref_folders);
+	} else {
+		global_ref_folders = false;
+		localStorage.setItem('dr_global_ref_folders', JSON.stringify(false));
+	}
+
+	document.getElementById('global_ref_folders').checked = global_ref_folders;
 }
 
 function check_trailing(path) {
