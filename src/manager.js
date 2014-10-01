@@ -1,5 +1,9 @@
-var order = JSON.parse(localStorage.getItem('dr_order'));
+var order    = JSON.parse(localStorage.getItem('dr_order'));
 var rulesets = {};
+
+if(!order) { 
+	order = ['filename', 'referrer', 'mime'];
+}
 
 rulesets['filename'] = function(downloadItem, suggest) {
 	filename_map = JSON.parse(localStorage.getItem('dr_filename_map'));
@@ -24,7 +28,13 @@ rulesets['referrer'] = function(downloadItem, suggest) {
 	ref_map = JSON.parse(localStorage.getItem('dr_referrer_map'));
 
 	if(Object.keys(ref_map).length) {
-		var matches    = downloadItem.referrer.match(/^https?\:\/\/([^\/:?#]+)(?:[\/:?#]|$)/i);
+		var matches;
+		if(downloadItem.referrer) {
+			matches    = downloadItem.referrer.match(/^https?\:\/\/([^\/:?#]+)(?:[\/:?#]|$)/i);
+		} else {
+			matches = downloadItem.url.match(/^https?\:\/\/([^\/:?#]+)(?:[\/:?#]|$)/i);
+		}
+
 		var ref_domain = matches && matches[1].replace(/^www\./i, '');
 
 		if(ref_map[ref_domain]) {
@@ -34,7 +44,6 @@ rulesets['referrer'] = function(downloadItem, suggest) {
 	}
 
 	if(JSON.parse(localStorage.getItem('dr_global_ref_folders'))) {
-		console.log('Global referrer folders enabled!');
 		suggest({ filename: ref_domain + '/' + downloadItem.filename });
 		return true;
 	}
@@ -57,7 +66,8 @@ rulesets['mime'] = function(downloadItem, suggest) {
 			'png': 'image/png',
 			'jpg': 'image/jpeg',
 			'exe': 'application/exe',
-			'avi': 'video/x-msvideo'
+			'avi': 'video/x-msvideo',
+			'torrent': 'application/x-bittorrent'
 		};
 
 		if(mapping[extension]) {

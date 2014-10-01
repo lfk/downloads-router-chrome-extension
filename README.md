@@ -12,6 +12,12 @@ to establish routing rules, directing downloads to folders based on filetype, fi
 Changelog
 ---------
 
+### 0.8.1 (September 30, 2014)
+
+* Referrer downloads now use URL as fallback if no referrer information is provided
+* Now correctly marks the mime-type of torrent files sent as octet-streams, permitting MIME routing from sources such as torcache
+* Provided fallback setting in case no rule order has been saved, a case that previously broke the extension
+
 ### 0.8 (August 27, 2014)
 
 * Added the global referrers folder mapping option
