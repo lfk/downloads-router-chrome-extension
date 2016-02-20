@@ -38,7 +38,19 @@ rulesets['referrer'] = function(downloadItem, suggest) {
 		var ref_domain = matches && matches[1].replace(/^www\./i, '');
 
 		if(ref_map[ref_domain]) {
-			suggest({ filename: ref_map[ref_domain] + downloadItem.filename });
+            var suggestion = ref_map[ref_domain];
+            if (suggestion.match("{(pathsegment[1-9]|hostname)}")) {
+                var referrerUrl = new URL(downloadItem.referrer);
+                suggestion = suggestion.replace("{hostname}", referrerUrl.hostname);
+                var pathSegments = referrerUrl.pathname ? referrerUrl.pathname.split('/') : [];
+                pathSegments = pathSegments.filter(function(segment) {
+                    return segment ? true : false
+                });
+                pathSegments.forEach(function(segment, index) {
+                    suggestion = segment ? suggestion.replace("{pathsegment" + ++index + "}", decodeURIComponent(segment)) : suggestion;
+                });
+            }
+            suggest({filename: suggestion + downloadItem.filename});
 			return true;
 		}
 	}
