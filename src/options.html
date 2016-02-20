@@ -198,6 +198,7 @@
 					</table>
 					<ul class="note">
 						<li>Do not include http:// or www. Other subdomains, such as images.domain.com, <strong>are</strong> required.</li>
+						<li>You can refer to parts of the referrer URL using {hostname} and {pathsegment[1-9]}, this is independent of the matched referrer URL. Path segments are URL decoded. E.g. for a referrer of example.com/articles/user%20uploads and a destination folder of {hostname}/{pathsegment2} the suggested download folder would be example.com/user uploads</li>
 						<li>Larger websites often utilize Content Distribution Networks, which means that the referrer for a certain image might not be the same as the domain of the website you are visiting. Facebook, for instance, uses the Akamai network to serve images.</li>
 					</ul>
 
