@@ -1,7 +1,7 @@
 var g_dr_order;
 var g_dr_global_ref_folders;
 var g_dr_global_debugging;
-
+var g_inited;
 
 var optionsMaps = [
 	'dr_mime_map',
@@ -232,13 +232,21 @@ function add_filename_route() {
 }
 
 function options_setup() {
+    chrome.storage.local.get(['dr_mime_map'], function(items) {
+			g_inited = items.dr_mime_map;
+
+			options_setup_callback();
+	});
+}
+
+function options_setup_callback() {
 	var cont   = document.getElementById('wrap');
 	var navs   = cont.querySelectorAll('ul#nav li');
 	var tabs   = cont.querySelectorAll('.tab');
 	var active = 'routing';
-/*
+
 	// Handle new installations by showing the usage instructions and a quick message
-	if(!localStorage.getItem('dr_mime_map')) {
+	if(!g_inited) {
 		active = 'usage';
 
 		var status = document.getElementById('status');
@@ -249,7 +257,7 @@ function options_setup() {
 			status.style.display = 'none';
 		}, 7500);
 	}
-*/
+
 	navs[0].parentNode.dataset.current = active;
 
 	for(var i = 0; i < tabs.length; i++) {
