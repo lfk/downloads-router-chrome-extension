@@ -168,8 +168,8 @@
 					Destinations must be located within the base downloads folder; use symbolic links to circumvent this restriction (see usage instructions).</p>
 
 					<h2>Rule execution hierarchy</h2>
-					<p>Specify the order in which you would like the tables taversed.<br><em>Default is filename, referrer, mime.</em></p>
-					<input type="text" id="rule_order" name="rule_order" value="" placeholder="filename, referrer, mime">
+					<p>Specify the order in which you would like the tables taversed.<br><em>Default is filename, uriPath, referrer, mime.</em></p>
+					<input type="text" id="rule_order" name="rule_order" value="" placeholder="filename, uriPath, referrer, mime">
 
 					<h2>Filetype &#8680; folder mapping</h2>
 					<table id="mime_mapping_table">
@@ -212,6 +212,16 @@
 						</tbody>
 					</table>
 					<p class="note">* Keywords are case-insensitive. Recommended basic usage is a single keyword per rule. Further guidelines are available on the "Usage instructions" page. The keyword is treated directly as a regular expression &mdash; feel free to experiment.</p>
+
+					<h2>URI path fragment&#8680; folder mapping</h2>
+					<table id="uriPath_mapping_table">
+						<thead>
+							<tr><th>URI path fragment</th><th></th><th>Destination folder</th><th></th></tr>
+						</thead>
+						<tbody>
+							<tr><td colspan="4"><button id="add_uriPath_route" class="btn"><strong>+</strong> Add new routing rule</button></td></tr>
+						</tbody>
+					</table>
 
 					<h2>Troubleshooting</h2>
 

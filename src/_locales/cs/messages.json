@@ -1,0 +1,12 @@
+{
+	"appName": {
+		"message": "Downloads Router"
+	},
+	"appDesc": {
+		"message": "Zajišťuje automatické směrování souborů do lokálních složek při stahování."
+	},
+
+	"msg_saved": {
+		"message": "Nastavení uloženo."
+	}
+}

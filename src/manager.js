@@ -6,6 +6,7 @@ var installedVersion = null;
 var dr_order = null;
 var filename_map;
 var ref_map;
+var uriPath_map;
 var mime_map;
 var dr_global_ref_folders;
 var dr_global_debugging = false;
@@ -88,6 +89,27 @@ rulesets.referrer = function(downloadItem, suggest) {
 	return false;
 };
 
+rulesets.uriPath = function(downloadItem, suggest) {
+	customLog('rulesets.uriPath():: begin');
+
+	var keys = Object.keys(uriPath_map);
+	if(keys.length) {
+		var idx, regex, matches;
+		for(idx = 0; idx < keys.length; idx++) {
+			regex   = new RegExp(keys[idx], 'i');
+			matches = regex.exec(downloadItem.url);
+			if(matches) {
+				suggest({ filename: uriPath_map[keys[idx]] + downloadItem.filename });
+				customLog('rulesets.uriPath():: suggest: ' + uriPath_map[keys[idx]] + downloadItem.filename);
+				return true;
+			}
+		}
+	}
+
+	customLog('rulesets.uriPath():: no suggest');
+	return false;
+};
+
 rulesets.mime = function(downloadItem, suggest) {
 	customLog('rulesets.mime():: begin');
 	var mime_type = downloadItem.mime;    
@@ -162,6 +184,11 @@ async function asyncProcess(downloadItem, suggest) {
 	} else {
 		mime_map = [];
 	}
+	if (storageCache.dr_uriPath_map) {
+		uriPath_map  = JSON.parse(storageCache.dr_uriPath_map);
+	} else {
+		uriPath_map = [];
+	}
 
 	dr_global_ref_folders = storageCache.dr_global_ref_folders;
 	if (!dr_global_ref_folders) {
@@ -216,7 +243,7 @@ function initMain() {
 function initMainCallback() {
 	if (!dr_order) {
 		// initialize
-		dr_order = ['filename', 'referrer', 'mime'];
+		dr_order = ['filename', 'uriPath', 'referrer', 'mime'];
 		chrome.storage.local.set({'dr_order': dr_order});
 	}
 
