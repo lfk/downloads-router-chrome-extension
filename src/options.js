@@ -1,3 +1,15 @@
+var g_dr_order;
+var g_dr_global_ref_folders;
+var g_dr_global_debugging;
+
+
+var optionsMaps = [
+	'dr_mime_map',
+	'dr_referrer_map',
+	'dr_filename_map'
+];
+var optionsMapsData = [];
+
 function save_options() {
 	var maps = [{}, {}, {}];
 	var tables = [
@@ -16,9 +28,9 @@ function save_options() {
 		}
 	}
 
-	localStorage.setItem('dr_mime_map', JSON.stringify(maps[0]));
-	localStorage.setItem('dr_referrer_map', JSON.stringify(maps[1]));
-	localStorage.setItem('dr_filename_map', JSON.stringify(maps[2]));
+	chrome.storage.local.set({'dr_mime_map': JSON.stringify(maps[0])});
+	chrome.storage.local.set({'dr_referrer_map': JSON.stringify(maps[1])});
+	chrome.storage.local.set({'dr_filename_map': JSON.stringify(maps[2])});
 
 
 	var order = document.getElementById('rule_order').value;
@@ -35,9 +47,13 @@ function save_options() {
 		return true; // Again, abusing every()
 	}); 
 
-	localStorage.setItem('dr_order', JSON.stringify(order));
-	localStorage.setItem('dr_global_ref_folders',
-		JSON.parse(document.querySelector('#global_ref_folders').checked));
+	chrome.storage.local.set({'dr_order': order});
+	chrome.storage.local.set({'dr_global_ref_folders':
+									document.querySelector('#global_ref_folders').checked
+							 });
+	chrome.storage.local.set({'dr_global_debugging':
+									document.querySelector('#global_debugging').checked
+							 });
 
 	// Flash a status message
 	var status = document.getElementById('status');
@@ -51,32 +67,43 @@ function save_options() {
 }
 
 function restore_options() {
-	var tables = [
-		document.getElementById('mime_mapping_table').getElementsByTagName('tbody')[0],
-		document.getElementById('referrer_mapping_table').getElementsByTagName('tbody')[0],
-		document.getElementById('filename_mapping_table').getElementsByTagName('tbody')[0]
-	];
+    chrome.storage.local.get(['dr_order', 'dr_filename_map', 'dr_referrer_map', 'dr_mime_map', 'dr_global_ref_folders', 'global_debugging'], function(items) {
+			g_dr_order = items.dr_order;
 
-	var maps = [
-		'dr_mime_map',
-		'dr_referrer_map',
-		'dr_filename_map'
-	];
+			optionsMapsData[0]  = items.dr_mime_map;
+			optionsMapsData[1] = items.dr_referrer_map;
+			optionsMapsData[2] = items.dr_filename_map;
 
+			g_dr_global_ref_folders = items.dr_global_ref_folders;
+			g_dr_global_debugging   = items.global_debugging;
+
+			restore_options_finish();
+	});
+}
+
+function restore_options_finish() {
 	var map_defaults = [
 		{ 'image/jpeg': 'images/', 'application/x-bittorrent': 'torrents/' },
 		{},
 		{}
 	];
 
-	for(var idx = 0; idx < maps.length; ++idx) {
+	var tables = [
+		document.getElementById('mime_mapping_table').getElementsByTagName('tbody')[0],
+		document.getElementById('referrer_mapping_table').getElementsByTagName('tbody')[0],
+		document.getElementById('filename_mapping_table').getElementsByTagName('tbody')[0]
+	];
+
+	for(var idx = 0; idx < optionsMaps.length; ++idx) {
 		// Restore or create mapping table
-		var map = localStorage.getItem(maps[idx]);
+		var map = optionsMapsData[idx];
 		if(map) {
 			map = JSON.parse(map);
 		} else {
 			map = map_defaults[idx];
-			localStorage.setItem(maps[idx], JSON.stringify(map));
+			let obj = {};
+			obj[optionsMaps[idx]] = JSON.stringify(map);
+			chrome.storage.local.set(obj);
 		}
 
 		// Create HTML table elements for corresponding map
@@ -95,26 +122,31 @@ function restore_options() {
 		}
 	}
 
-	var order = localStorage.getItem('dr_order');
-	if(order) {
-		order = JSON.parse(order);
-	} else {
+	var order = g_dr_order;
+	if (!order) {
 		order = ['filename', 'referrer', 'mime'];
-		localStorage.setItem('dr_order', JSON.stringify(order));
+		chrome.storage.local.set({'dr_order': order});
 	}
 
 	document.getElementById('rule_order').value = order;
 
-
-	var global_ref_folders = localStorage.getItem('dr_global_ref_folders');
-	if(global_ref_folders) {
-		global_ref_folders = JSON.parse(global_ref_folders);
-	} else {
+	// global_ref_folders
+	var global_ref_folders = g_dr_global_ref_folders;
+	if (!global_ref_folders) {
 		global_ref_folders = false;
-		localStorage.setItem('dr_global_ref_folders', JSON.stringify(false));
+		chrome.storage.local.set({'dr_global_ref_folders': global_ref_folders});
 	}
 
 	document.getElementById('global_ref_folders').checked = global_ref_folders;
+
+	// global_debugging
+	var global_debugging = g_dr_global_debugging;
+	if (!global_debugging) {
+		global_debugging = false;
+		chrome.storage.local.set({'dr_global_debugging': global_debugging});
+	}
+
+	document.getElementById('global_debugging').checked = global_ref_folders;
 }
 
 function check_trailing(path) {
@@ -204,7 +236,7 @@ function options_setup() {
 	var navs   = cont.querySelectorAll('ul#nav li');
 	var tabs   = cont.querySelectorAll('.tab');
 	var active = 'routing';
-
+/*
 	// Handle new installations by showing the usage instructions and a quick message
 	if(!localStorage.getItem('dr_mime_map')) {
 		active = 'usage';
@@ -217,7 +249,7 @@ function options_setup() {
 			status.style.display = 'none';
 		}, 7500);
 	}
-
+*/
 	navs[0].parentNode.dataset.current = active;
 
 	for(var i = 0; i < tabs.length; i++) {

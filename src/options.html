@@ -153,6 +153,7 @@
 
 			<div id="news">
 				<p><strong>(v0.8.1) Sept. 30, 2014:</strong> Bug fixes and fallback cases for referrer- and MIME-rules.</p>
+				<p><strong>July 07, 2021:</strong> Chrome Manifest V3 migration. Console output support added (debug messages).</p>
 			</div>
 
 			<ul id="nav">
@@ -212,6 +213,14 @@
 					</table>
 					<p class="note">* Keywords are case-insensitive. Recommended basic usage is a single keyword per rule. Further guidelines are available on the "Usage instructions" page. The keyword is treated directly as a regular expression &mdash; feel free to experiment.</p>
 
+					<h2>Troubleshooting</h2>
+
+					<div style="margin: 5px; padding: 10px; border: 1px solid #efefef; background-color: #fafafa;">
+						<input type="checkbox" name="" id="global_debugging" value="1">  
+						<h5 style="display: inline-block; margin: 0;"><label for="global_debugging">Enable debugging</label></h5>
+						<p class="note">Enable this checkbox to start logging debug messages to extension's console output (extension detail / Inspect views / service worker).</p>
+					</div>
+
 					<button id="save" class="btn2">&#10004; Save configuration</button>
 
 					<h2>Common MIME types</h2>
@@ -250,7 +259,7 @@
 					You may manually circumvent this restriction by creating a "symbolic link" (<a href="http://www.howtogeek.com/howto/16226/complete-guide-to-symbolic-links-symlinks-on-windows-or-linux/">more info</a>)
 					from within the downloads directory to any other direction on your harddrive(s).</p>
 
-					<h3>Symlinks on Windows (XP, Vista, 7, 8)</h3>
+					<h3>Symlinks on Windows (XP, Vista, 7, 8, 10)</h3>
 
 					<ol>
 						<li>Open the command prompt (cmd.exe) as Administrator<br><em>Search for cmd in the start menu, right-click and choose 'Run as Administrator'</em></li>

@@ -1,5 +1,5 @@
 {
-	"manifest_version": 2,
+	"manifest_version": 3,
 
 	"name": "__MSG_appName__",
 	"short_name": "DLRouter",
@@ -11,12 +11,11 @@
 	"homepage_url": "https://bitbucket.org/lfk/downloads-router-chrome-extension",
 
 	"permissions": [
-		"downloads"
+		"downloads", "tabs", "storage"
 	],
 
 	"background": {
-		"scripts": ["manager.js"],
-		"persistent": false
+		"service_worker": "manager.js"
 	},
 
 	"icons": {
