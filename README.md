@@ -1,4 +1,4 @@
-Downloads Router
+Downloads Router Plus
 ===============
 
 Downloads Router is an extension for Chromium and Google Chrome that allows the user
@@ -11,6 +11,10 @@ to establish routing rules, directing downloads to folders based on filetype, fi
 
 Changelog
 ---------
+
+### 1.0.0 (September 10, 2025)
+
+- Upgraded to MV3
 
 ### 0.8.1 (September 30, 2014)
 

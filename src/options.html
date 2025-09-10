@@ -1,376 +1,572 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>Downloads Router Configuration</title>
-		<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;subset=latin" rel="stylesheet">
 
-		<style>
-			body {
-				background-color: #f7f7f7;
-				font-family: 'Open Sans', 'Helvetica', 'Arial', sans-serif;
-				font-size: 0.9em;
-				cursor: default;
-			} header {
-				border-bottom: 1px solid #e0e0e0;
-				padding: 5px 0;
-				margin: 0 0 15px 0;
-			} header img {
-				vertical-align: middle;
-			} table {
-				width: 100%;
-				margin: 0 0 15px 0;
-				border-spacing: 0;
-			} header h1 {
-				font-size: 1.4em;
-				font-weight: 300;
-				vertical-align: middle;
-				display: inline;
-			} .tab h1 {
-				text-transform: uppercase;
-				font-size: 1.6em;
-				font-weight: 200;
-				color: #000;
-			} h2 {
-				font-size: 1.5em;
-				font-weight: 400;
-				color: #5075ce;
-			} h3, th {
-				font-size: 1.25em;
-				font-weight: normal;
-				text-align: left;
-			} input[type=text], input[type=url] {
-				width: 90%;
-				padding: 4px;
-				border: none;
-				border-bottom: 1px dotted #cecece;
-				font-family: monospace;
-			} button {
-				border: none;
-				padding: 10px;
-				cursor: pointer;
-			} button.btn, button.btn2 {
-				background-color: #6d6d6d;
-				color: #fff;
-				transition: .2s ease;
-				padding: 13px 0;
-				width: 100%;
-			} button.btn2 {
-				background-color: #38851b;
-			} button.btn:hover {
-				background-color: #5f90e5;
-			} button.btn2:hover {
-				background-color: #73ce50;
-			} button.delete {
-				color: #cc0000;
+<head>
+	<meta charset="utf-8">
+	<title>Downloads Router Configuration</title>
+	<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;subset=latin" rel="stylesheet">
+
+	<style>
+		body {
+			background-color: #f7f7f7;
+			font-family: 'Open Sans', 'Helvetica', 'Arial', sans-serif;
+			font-size: 0.9em;
+			cursor: default;
+		}
+
+		header {
+			border-bottom: 1px solid #e0e0e0;
+			padding: 5px 0;
+			margin: 0 0 15px 0;
+		}
+
+		header img {
+			vertical-align: middle;
+		}
+
+		table {
+			width: 100%;
+			margin: 0 0 15px 0;
+			border-spacing: 0;
+		}
+
+		header h1 {
+			font-size: 1.4em;
+			font-weight: 300;
+			vertical-align: middle;
+			display: inline;
+		}
+
+		.tab h1 {
+			text-transform: uppercase;
+			font-size: 1.6em;
+			font-weight: 200;
+			color: #000;
+		}
+
+		h2 {
+			font-size: 1.5em;
+			font-weight: 400;
+			color: #5075ce;
+		}
+
+		h3,
+		th {
+			font-size: 1.25em;
+			font-weight: normal;
+			text-align: left;
+		}
+
+		input[type=text],
+		input[type=url] {
+			width: 90%;
+			padding: 4px;
+			border: none;
+			border-bottom: 1px dotted #cecece;
+			font-family: monospace;
+		}
+
+		button {
+			border: none;
+			padding: 10px;
+			cursor: pointer;
+		}
+
+		button.btn,
+		button.btn2 {
+			background-color: #6d6d6d;
+			color: #fff;
+			transition: .2s ease;
+			padding: 13px 0;
+			width: 100%;
+		}
+
+		button.btn2 {
+			background-color: #38851b;
+		}
+
+		button.btn:hover {
+			background-color: #5f90e5;
+		}
+
+		button.btn2:hover {
+			background-color: #73ce50;
+		}
+
+		button.delete {
+			color: #cc0000;
+			font-weight: bold;
+			font-size: 1.4em;
+			padding: 2px;
+			background: transparent;
+		}
+
+		button.delete:hover {
+			color: #ff0000;
+			background: transparent;
+		}
+
+		pre {
+			font-size: 0.85em;
+			color: #555;
+			border-left: 5px solid #ccc;
+			line-height: 1.4em;
+			padding: 0 0 0 10px;
+		}
+
+		p {
+			text-align: justify;
+		}
+
+		a {
+			color: #0050cc;
+			text-decoration: none;
+		}
+
+		a:hover {
+			color: #000000;
+		}
+
+		#wrap {
+			width: 60%;
+			min-width: 500px;
+			margin: 10px auto;
+			overflow: hidden;
+		}
+
+		#news {
+			margin: 0 0 10px 0;
+			padding: 1px 15px;
+			font-size: 0.8em;
+			border-radius: 6px;
+			background-color: rgba(255, 225, 120, 0.45);
+		}
+
+		#status {
+			width: 100%;
+			text-align: center;
+			font-size: 1.3em;
+			background-color: #fff;
+			box-shadow: 1px 0 4px #ccc;
+			transition: .6s ease;
+			padding: 15px 0;
+			display: none;
+			position: fixed;
+			top: 0px;
+		}
+
+		.green {
+			color: #00aa00;
+			font-weight: bold;
+		}
+
+		.note {
+			font-style: italic;
+			font-size: 0.85em;
+			color: #333;
+		}
+
+		ul#nav {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		}
+
+		ul#nav>li {
+			display: inline-block;
+			background-color: #6f95e5;
+			color: #fff;
+			font-size: 1.05em;
+			font-weight: 200;
+			padding: 10px 15px;
+			cursor: pointer;
+			transition: .2s ease;
+		}
+
+		ul#nav>li:hover {
+			background-color: #5370ca;
+		}
+
+		ul#nav>li.active {
+			margin: 0;
+			background-color: #fff;
+			color: #000;
+		}
+
+		.tab {
+			overflow: hidden;
+			margin: 0 2px 5px 0;
+			background-color: #fff;
+			box-shadow: 1px 1px 3px #bbb;
+			padding: 10px 20px;
+			transition: .4s ease;
+		}
+
+		.section-debug {
+			padding-bottom: 1em;
+			/* display: flex; */
+			/* align-items: center; */
+
+			h3 {
 				font-weight: bold;
-				font-size: 1.4em;
-				padding: 2px;
-				background: transparent;
-			} button.delete:hover {
-				color: #ff0000;
-				background: transparent;
-			} pre {
-				font-size: 0.85em;
-				color: #555;
-				border-left: 5px solid #ccc;
-				line-height: 1.4em;
-				padding: 0 0 0 10px;
-			} p {
-				text-align: justify;
-			} a {
-				color: #0050cc;
-				text-decoration: none;
-			} a:hover {
-				color: #000000;
-			} #wrap {
-				width: 60%;
-				min-width: 500px;
-				margin: 10px auto;
-				overflow: hidden;
-			} #news {
-				margin: 0 0 10px 0;
-				padding: 1px 15px;
-				font-size: 0.8em;
-				border-radius: 6px;
-				background-color: rgba(255, 225, 120, 0.45);
-			} #status {
-				width: 100%;
-				text-align: center;
-				font-size: 1.3em;
-				background-color: #fff;
-				box-shadow: 1px 0 4px #ccc;
-				transition: .6s ease;
-				padding: 15px 0;
-				display: none;
-				position: fixed;
-				top: 0px;
-			} .green {
-				color: #00aa00;
-				font-weight: bold;
-			} .note {
-				font-style: italic;
-				font-size: 0.85em;
-				color: #333;
+				/* flex-basis: 4em; */
+				color: maroon;
 			}
+		}
+	</style>
+</head>
 
-			ul#nav {
-				list-style: none;
-				margin: 0;
-				padding: 0;
-			} ul#nav > li {
-				display: inline-block;
-				background-color: #6f95e5;
-				color: #fff;
-				font-size: 1.05em;
-				font-weight: 200;
-				padding: 10px 15px;
-				cursor: pointer;
-				transition: .2s ease;
-			} ul#nav > li:hover {
-				background-color: #5370ca;
-			} ul#nav > li.active {
-				margin: 0;
-				background-color: #fff;
-				color: #000;
-			} .tab {
-				overflow: hidden;
-				margin: 0 2px 5px 0;
-				background-color: #fff;
-				box-shadow: 1px 1px 3px #bbb;
-				padding: 10px 20px;
-				transition: .4s ease;
-			}
-		</style>
-	</head>
-	<body>
-		<div id="status"></div>
-		<div id="wrap">
-			<header>
-				<img id="dr-icon" src="data/icon32.png" alt="DR" height="26" width="30">
-				<h1>Downloads Router Configuration</h1>
-			</header>
+<body>
+	<div id="status"></div>
+	<div id="wrap">
+		<header>
+			<img id="dr-icon" src="data/icon32.png" alt="DR" height="26" width="30">
+			<h1>Downloads Router Configuration</h1>
+		</header>
 
-			<div id="news">
-				<p><strong>(v0.8.1) Sept. 30, 2014:</strong> Bug fixes and fallback cases for referrer- and MIME-rules.</p>
+		<div class="section-debug">
+			<h3>Debug</h3>
+			<label>
+				<input type="checkbox" id="debug_logging">
+				Enable debug logging (view in chrome://extensions → Service Worker console, applies immediately)
+			</label>
+		</div>
+
+		<div id="news">
+			<p><strong>(v1.0.0) Sept. 10, 2025:</strong> MV3 Update</p>
+			<p><strong>(v0.8.1) Sept. 30, 2014:</strong> Bug fixes and fallback cases for referrer- and MIME-rules.</p>
+		</div>
+
+		<ul id="nav">
+			<li id="nav_routing" data-tab="routing">Routing rules</li>
+			<li id="nav_usage" data-tab="usage">Usage instructions</li>
+			<li id="nav_about" data-tab="about">About</li>
+			<button id="migrate">Migrate old settings ⭐️</button>
+		</ul>
+
+		<div id="content">
+			<div class="tab" id="routing">
+				<h1>Routing rules</h1>
+
+				<p>Please provide destination folders delimited by forward slash (/).<br>
+					Destinations must be located within the base downloads folder; use symbolic links to circumvent this
+					restriction (see usage instructions).</p>
+
+				<h2>Rule execution hierarchy</h2>
+				<p>Specify the order in which you would like the tables taversed.<br><em>Default is filename, referrer,
+						mime.</em></p>
+				<input type="text" id="rule_order" name="rule_order" value placeholder="filename, referrer, mime">
+
+				<h2>Filetype &#8680; folder mapping</h2>
+				<table id="mime_mapping_table">
+					<thead>
+						<tr>
+							<th>Filetype (MIME)</th>
+							<th></th>
+							<th>Destination folder</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td colspan="4"><button id="add_mime_route" class="btn"><strong>+</strong> Add new routing
+									rule</button></td>
+						</tr>
+					</tbody>
+				</table>
+
+				<h2>Referrer &#8680; folder mapping</h2>
+
+				<div style="margin: 5px; padding: 10px; border: 1px solid #efefef; background-color: #fafafa;">
+					<input type="checkbox" name="global_refs" id="global_ref_folders" value="1">
+					<h5 style="display: inline-block; margin: 0;"><label for="global_ref_folders">Enable global referrer
+							folders</label></h5>
+					<p class="note">Enable this checkbox to make <strong>all</strong> downloads (not preceded by another
+						explicit rule) be stored in a folder with the same name as the source domain.</p>
+				</div>
+
+				<table id="referrer_mapping_table">
+					<thead>
+						<tr>
+							<th>Source domain</th>
+							<th></th>
+							<th>Destination folder</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td colspan="4"><button id="add_referrer_route" class="btn"><strong>+</strong> Add new
+									routing rule</button></td>
+						</tr>
+					</tbody>
+				</table>
+				<ul class="note">
+					<li>Do not include http:// or www. Other subdomains, such as images.domain.com, <strong>are</strong>
+						required.</li>
+					<li>Larger websites often utilize Content Distribution Networks, which means that the referrer for a
+						certain image might not be the same as the domain of the website you are visiting. Facebook, for
+						instance, uses the Akamai network to serve images.</li>
+				</ul>
+
+				<h2>Filename &#8680; folder mapping</h2>
+				<table id="filename_mapping_table">
+					<thead>
+						<tr>
+							<th>Filename keyword</th>
+							<th></th>
+							<th>Destination folder</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td colspan="4"><button id="add_filename_route" class="btn"><strong>+</strong> Add new
+									routing rule</button></td>
+						</tr>
+					</tbody>
+				</table>
+				<p class="note">* Keywords are case-insensitive. Recommended basic usage is a single keyword per rule.
+					Further guidelines are available on the "Usage instructions" page. The keyword is treated directly
+					as a regular expression &mdash; feel free to experiment.</p>
+
+				<button id="save" class="btn2">&#10004; Save configuration</button>
+
+				<h2>Common MIME types</h2>
+				<p class="note">This table contains a few common MIME types that might help you set up your routing
+					configuration. A more extensive list is available on <a
+						href="http://en.wikipedia.org/wiki/Internet_media_type#List_of_common_media_types">Wikipedia</a>.
+				</p>
+
+				<table id="common_mimetypes">
+					<tbody>
+						<tr>
+							<td>application/pdf</td>
+							<td>PDF documents</td>
+						</tr>
+						<tr>
+							<td>application/zip</td>
+							<td>Compressed archives</td>
+						</tr>
+						<tr>
+							<td>application/x-bittorrent</td>
+							<td>Torrent files</td>
+						</tr>
+						<tr>
+							<td>application/exe</td>
+							<td>Windows executable</td>
+						</tr>
+						<tr>
+							<td>audio/mpeg</td>
+							<td>MP3 and other MPEG audio</td>
+						</tr>
+						<tr>
+							<td>image/gif</td>
+							<td>GIF images</td>
+						</tr>
+						<tr>
+							<td>image/jpeg</td>
+							<td>JPEG images</td>
+						</tr>
+						<tr>
+							<td>image/png</td>
+							<td>PNG images</td>
+						</tr>
+						<tr>
+							<td>video/x-msvideo</td>
+							<td>AVI video</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<h2>Advanced filename keywords</h2>
+				<p class="note">A few helpful tricks for more powerful filename-based routing.</p>
+				<table id="advanced_keywords">
+					<tbody>
+						<tr>
+							<td>a|b</td>
+							<td>"|" is an else operator<br><span class="note">Matches "a" or "b".</span></td>
+						</tr>
+						<tr>
+							<td>a.b</td>
+							<td>"." is a single-character wildcard<br><span class="note">Matches "a-b", "a_b", "a b",
+									etc.</span></td>
+						</tr>
+						<tr>
+							<td>a.*b</td>
+							<td>".*" multi-character wildcard<br><span class="note">Matches "a" followed by
+									<strong>anything</strong> then followed by "b".</span></td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 
-			<ul id="nav">
-				<li id="nav_routing" data-tab="routing">Routing rules</li><li id="nav_usage" data-tab="usage">Usage instructions</li><li id="nav_about" data-tab="about">About</li>
-			</ul>
+			<div class="tab" id="usage">
+				<h1>Usage instructions</h1>
 
-			<div id="content">
-				<div class="tab" id="routing">
-					<h1>Routing rules</h1>
-
-					<p>Please provide destination folders delimited by forward slash (/).<br>
-					Destinations must be located within the base downloads folder; use symbolic links to circumvent this restriction (see usage instructions).</p>
-
-					<h2>Rule execution hierarchy</h2>
-					<p>Specify the order in which you would like the tables taversed.<br><em>Default is filename, referrer, mime.</em></p>
-					<input type="text" id="rule_order" name="rule_order" value="" placeholder="filename, referrer, mime">
-
-					<h2>Filetype &#8680; folder mapping</h2>
-					<table id="mime_mapping_table">
-						<thead>
-							<tr><th>Filetype (MIME)</th><th></th><th>Destination folder</th><th></th></tr>
-						</thead>
-						<tbody>
-							<tr><td colspan="4"><button id="add_mime_route" class="btn"><strong>+</strong> Add new routing rule</button></td></tr>
-						</tbody>
-					</table>
-	
-					<h2>Referrer &#8680; folder mapping</h2>
-
-					<div style="margin: 5px; padding: 10px; border: 1px solid #efefef; background-color: #fafafa;">
-						<input type="checkbox" name="global_refs" id="global_ref_folders" value="1">  
-						<h5 style="display: inline-block; margin: 0;"><label for="global_ref_folders">Enable global referrer folders</label></h5>
-						<p class="note">Enable this checkbox to make <strong>all</strong> downloads (not preceded by another explicit rule) be stored in a folder with the same name as the source domain.</p>
-					</div>
-
-					<table id="referrer_mapping_table">
-						<thead>
-							<tr><th>Source domain</th><th></th><th>Destination folder</th><th></th></tr>
-						</thead>
-						<tbody>
-							<tr><td colspan="4"><button id="add_referrer_route" class="btn"><strong>+</strong> Add new routing rule</button></td></tr>
-						</tbody>
-					</table>
-					<ul class="note">
-						<li>Do not include http:// or www. Other subdomains, such as images.domain.com, <strong>are</strong> required.</li>
-						<li>Larger websites often utilize Content Distribution Networks, which means that the referrer for a certain image might not be the same as the domain of the website you are visiting. Facebook, for instance, uses the Akamai network to serve images.</li>
-					</ul>
-
-					<h2>Filename &#8680; folder mapping</h2>
-					<table id="filename_mapping_table">
-						<thead>
-							<tr><th>Filename keyword</th><th></th><th>Destination folder</th><th></th></tr>
-						</thead>
-						<tbody>
-							<tr><td colspan="4"><button id="add_filename_route" class="btn"><strong>+</strong> Add new routing rule</button></td></tr>
-						</tbody>
-					</table>
-					<p class="note">* Keywords are case-insensitive. Recommended basic usage is a single keyword per rule. Further guidelines are available on the "Usage instructions" page. The keyword is treated directly as a regular expression &mdash; feel free to experiment.</p>
-
-					<button id="save" class="btn2">&#10004; Save configuration</button>
-
-					<h2>Common MIME types</h2>
-					<p class="note">This table contains a few common MIME types that might help you set up your routing configuration. A more extensive list is available on <a href="http://en.wikipedia.org/wiki/Internet_media_type#List_of_common_media_types">Wikipedia</a>.</p>
-
-					<table id="common_mimetypes">
-						<tbody>
-							<tr><td>application/pdf</td><td>PDF documents</td></tr>
-							<tr><td>application/zip</td><td>Compressed archives</td></tr>
-							<tr><td>application/x-bittorrent</td><td>Torrent files</td></tr>
-							<tr><td>application/exe</td><td>Windows executable</td></tr>
-							<tr><td>audio/mpeg</td><td>MP3 and other MPEG audio</td></tr>
-							<tr><td>image/gif</td><td>GIF images</td></tr>
-							<tr><td>image/jpeg</td><td>JPEG images</td></tr>
-							<tr><td>image/png</td><td>PNG images</td></tr>
-							<tr><td>video/x-msvideo</td><td>AVI video</td></tr>
-						</tbody>
-					</table>
-
-					<h2>Advanced filename keywords</h2>
-					<p class="note">A few helpful tricks for more powerful filename-based routing.</p>
-					<table id="advanced_keywords">
-						<tbody>
-							<tr><td>a|b</td><td>"|" is an else operator<br><span class="note">Matches "a" or "b".</span></td></tr>
-							<tr><td>a.b</td><td>"." is a single-character wildcard<br><span class="note">Matches "a-b", "a_b", "a b", etc.</span></td></tr>
-							<tr><td>a.*b</td><td>".*" multi-character wildcard<br><span class="note">Matches "a" followed by <strong>anything</strong> then followed by "b".</span></td></tr>
-						</tbody>
-					</table>
-				</div>
-
-				<div class="tab" id="usage">
-					<h1>Usage instructions</h1>
-
-					<h2>Important information</h2>
-					<p>Due to security concerns (see the <a href="https://developer.chrome.com/extensions/downloads#method-download">chrome.downloads API</a>), Chrome extensions are only allowed to download files to targets <strong>within the default downloads directory</strong>.
-					You may manually circumvent this restriction by creating a "symbolic link" (<a href="http://www.howtogeek.com/howto/16226/complete-guide-to-symbolic-links-symlinks-on-windows-or-linux/">more info</a>)
+				<h2>Important information</h2>
+				<p>Due to security concerns (see the <a
+						href="https://developer.chrome.com/extensions/downloads#method-download">chrome.downloads
+						API</a>), Chrome extensions are only allowed to download files to targets <strong>within the
+						default downloads directory</strong>.
+					You may manually circumvent this restriction by creating a "symbolic link" (<a
+						href="http://www.howtogeek.com/howto/16226/complete-guide-to-symbolic-links-symlinks-on-windows-or-linux/">more
+						info</a>)
 					from within the downloads directory to any other direction on your harddrive(s).</p>
 
-					<h3>Symlinks on Windows (XP, Vista, 7, 8)</h3>
+				<h3>Symlinks on Windows (XP, Vista, 7, 8)</h3>
 
-					<ol>
-						<li>Open the command prompt (cmd.exe) as Administrator<br><em>Search for cmd in the start menu, right-click and choose 'Run as Administrator'</em></li>
-						<li>Create the symbolic link: <strong>mklink /D TARGET LINK</strong><br><em>Substitute TARGET for the link name within Downloads, and LINK to your desired download destination</em>
-							<ul>
-								<li>Example: <em>mklink /D "C:\Users\MyName\Downloads\Music" "D:\Music"</em></li>
-							</ul>
-						</li>
-						<li>Configure Downloads Router, setting your Destination folder to TARGET.
-							<ul>
-								<li>Example: Filetype (MIME) = <em>audio/mpeg</em>, Destination folder = <em>Music/</em></li>
-							</ul>	
-						</li>
-					</ol>
+				<ol>
+					<li>Open the command prompt (cmd.exe) as Administrator<br><em>Search for cmd in the start menu,
+							right-click and choose 'Run as Administrator'</em></li>
+					<li>Create the symbolic link: <strong>mklink /D TARGET LINK</strong><br><em>Substitute TARGET for
+							the link name within Downloads, and LINK to your desired download destination</em>
+						<ul>
+							<li>Example: <em>mklink /D "C:\Users\MyName\Downloads\Music" "D:\Music"</em></li>
+						</ul>
+					</li>
+					<li>Configure Downloads Router, setting your Destination folder to TARGET.
+						<ul>
+							<li>Example: Filetype (MIME) = <em>audio/mpeg</em>, Destination folder = <em>Music/</em>
+							</li>
+						</ul>
+					</li>
+				</ol>
 
-					<h3>Symlinks on Linux and Mac</h3>
+				<h3>Symlinks on Linux and Mac</h3>
 
-					<ol>
-						<li>Open a terminal</li>
-						<li>Create the symbolic link: <strong>ln -s TARGET LINK_NAME</strong><br><em>TARGET is your desired download destination, LINK_NAME is the link within Downloads</em>
-							<ul>
-								<li>Example: <em>ln -s /home/myname/music /home/myname/Downloads/music</em></li>
-							</ul>
-						</li>
-						<li>Configure Downloads Router, setting your Destination folder to LINK_NAME.
-							<ul>
-								<li>Example: Filetype (MIME) = <em>audio/mpeg</em>, Destination folder = <em>music/</em></li>
-							</ul>	
-						</li>
-					</ol>
+				<ol>
+					<li>Open a terminal</li>
+					<li>Create the symbolic link: <strong>ln -s TARGET LINK_NAME</strong><br><em>TARGET is your desired
+							download destination, LINK_NAME is the link within Downloads</em>
+						<ul>
+							<li>Example: <em>ln -s /home/myname/music /home/myname/Downloads/music</em></li>
+						</ul>
+					</li>
+					<li>Configure Downloads Router, setting your Destination folder to LINK_NAME.
+						<ul>
+							<li>Example: Filetype (MIME) = <em>audio/mpeg</em>, Destination folder = <em>music/</em>
+							</li>
+						</ul>
+					</li>
+				</ol>
 
-					<p>Downloads Router's configuration (paths and rules) <strong>never</strong> require quotation marks.</p>
+				<p>Downloads Router's configuration (paths and rules) <strong>never</strong> require quotation marks.
+				</p>
 
+				<h2>Referrer routing</h2>
 
+				<p>A referrer is a website, such as <em>facebook.com</em> or <em>9gag.com</em>.</p>
+				<p>You do not need to provide the protocol prefix (http://), nor the <em>www</em> subdomain.
+					Any other subdomain, however, such as <em>images.domain.com</em>, IS a required part of the "source
+					domain" field.</p>
 
-					<h2>Referrer routing</h2>
-
-					<p>A referrer is a website, such as <em>facebook.com</em> or <em>9gag.com</em>.</p>
-					<p>You do not need to provide the protocol prefix (http://), nor the <em>www</em> subdomain.
-					Any other subdomain, however, such as <em>images.domain.com</em>, IS a required part of the "source domain" field.</p>
-
-					<p>Please note that some larger websites, such as Facebook, utilize Content Distribution Networks, which means that the
-					referrer of the file you wish to download is a different domain. To verify if this is the case, right-click the
+				<p>Please note that some larger websites, such as Facebook, utilize Content Distribution Networks, which
+					means that the
+					referrer of the file you wish to download is a different domain. To verify if this is the case,
+					right-click the
 					element in question and check the source of the file.</p>
 
+				<h2>Filetype (MIME) routing</h2>
 
+				<p>The MIME type is an identifier of the type of data that a file contains, and thus somewhat different
+					from an extension (such as .pdf, or .png).</p>
+				<p>The routing rules page provides a table with some common MIME types, and a more <a
+						href="http://en.wikipedia.org/wiki/Internet_media_type#List_of_common_media_types">exhaustive
+						list can be found on Wikipedia</a>.
 
-					<h2>Filetype (MIME) routing</h2>
+				<p>Sometimes web servers distribute files as <em>application/octet-stream</em> rather than the "correct"
+					MIME-type. Workarounds for the most common types have been implemented and should solve this issue
+					automatically,
+					but if you encounter problems, please attempt to use either of the other routing options to avoid
+					this issue.</p>
 
-					<p>The MIME type is an identifier of the type of data that a file contains, and thus somewhat different from an extension (such as .pdf, or .png).</p>
-					<p>The routing rules page provides a table with some common MIME types, and a more <a href="http://en.wikipedia.org/wiki/Internet_media_type#List_of_common_media_types">exhaustive list can be found on Wikipedia</a>.
+				<h2>Filename routing</h2>
 
-					<p>Sometimes web servers distribute files as <em>application/octet-stream</em> rather than the "correct" MIME-type. Workarounds for the most common types have been implemented and should solve this issue automatically, 
-					but if you encounter problems, please attempt to use either of the other routing options to avoid this issue.</p>
+				<p>Route to target folder based on <strong>case-insensitive</strong> keyword(s) in the filename, using
+					<strong>regular expressions</strong>.
+				</p>
 
+				<p>Please note that the matching is performed on a <em>substring</em> level, meaning that, for instance,
+					the keyword "jet" would trigger the rule on downloads with filenames like "jetski" or "jumbojet."
+				</p>
 
+				<p>The asterisk (*) is <strong>not</strong> used as a wildcard on its own, as is common in search
+					engines; in regular expressions, it means "the previous statement zero or more times."</p>
 
-					<h2>Filename routing</h2>
+				<p>You may use the "or" operator | to route a file containing <em>either</em> "ebook" or "epub" by
+					specifying "ebook|epub".</p>
+				<p>The period (.) is used as a wildcard matching any single character, including whitespaces, dashes,
+					and so forth. Thus, "some.keyword" would match "some keyword" as well as "some_keyword".
+					Powerusers may attempt to write more advanced regular expressions, but such usage has not been
+					tested.</p>
 
-					<p>Route to target folder based on <strong>case-insensitive</strong> keyword(s) in the filename, using <strong>regular expressions</strong>.</p>
+				<h4>A note on back references</h4>
+				<p>At the present, Downloads Router does <strong>not</strong> support back references for automatically
+					creating new downloads folders. This might be implemented in future versions.</p>
 
-					<p>Please note that the matching is performed on a <em>substring</em> level, meaning that, for instance, the keyword "jet" would trigger the rule on downloads with filenames like "jetski" or "jumbojet."</p>
+				<h2>Troubleshooting</h2>
+				<p class="note">Not working as intended? Here's some common issues. Please get in touch if you think
+					your trouble lies elsewhere!</em></p>
 
-					<p>The asterisk (*) is <strong>not</strong> used as a wildcard on its own, as is common in search engines; in regular expressions, it means "the previous statement zero or more times."</p>
+				<h5>Files not downloading to the given destination directory</h5>
+				<ul>
+					<li>The most common error is an invalid download path, such as a path outside of the downloads
+						folder.<br>
+						Open the extension's background page (chrome://extensions &gt; background page) and attempt to
+						download the file again with the "Console" tab open.
+						The following message indicates an invalid target path: <em>Error in respose handler for
+							downloadsInternal.determineFilename: Invalid filename at &hellip;</em></li>
+				</ul>
 
-					<p>You may use the "or" operator | to route a file containing <em>either</em> "ebook" or "epub" by specifying "ebook|epub".</p>
-					<p>The period (.) is used as a wildcard matching any single character, including whitespaces, dashes, and so forth. Thus, "some.keyword" would match "some keyword" as well as "some_keyword".
-					Powerusers may attempt to write more advanced regular expressions, but such usage has not been tested.</p>
+				<h5>Domain-based routing</h5>
+				<ul>
+					<li>Some websites serve content through other domains than what is visible in the Omnibar. To verify
+						if this might be your issue, right-click the item and "inspect" it &ndash; look for other
+						domains in the highlighted area.</li>
+				</ul>
 
-					<h4>A note on back references</h4>
-					<p>At the present, Downloads Router does <strong>not</strong> support back references for automatically creating new downloads folders. This might be implemented in future versions.</p>
+				<h5>MIME-based routing</h5>
+				<ul>
+					<li>Some websites serve binary content as "octet-streams," thereby hiding the correct MIME-type. The
+						plugin automatically attempts to match common extensions, but this approach will not cover all
+						cases. Domain-based routing could serve as a workaround in many cases.</li>
+				</ul>
 
+				<h5>Filename-based routing</h5>
+				<ul>
+					<li>"Greedy" matches, i.e. too general keywords matching on unintended downloads, or invalid regular
+						expressions would be two common error causes. For the latter, check the console and/or the
+						extension background page for debugging information.</li>
+				</ul>
+			</div>
 
+			<div class="tab" id="about">
+				<h1>About this extension</h1>
+				<p>This extension was hacked together overnight by yours truly, during the wee hours most sane people
+					spend sleeping. As such, there are certainly many features I've yet to think about, not to mention
+					bugs waiting to be discovered.</p>
+				<p>I'd be most grateful if you'd inform me of any and all such issues via the project source code
+					repository &mdash; and if you feel like adding some code yourself, that'd be beyond awesome!</p>
 
-					<h2>Troubleshooting</h2>
-					<p class="note">Not working as intended? Here's some common issues. Please get in touch if you think your trouble lies elsewhere!</em></p>
+				<ul>
+					<li><a href="https://bitbucket.org/lfk/downloads-router-chrome-extension">Official Bitbucket
+							repository</a>
+						<ul>
+							<li><a href="https://bitbucket.org/lfk/downloads-router-chrome-extension/issues">Issue
+									tracker</a></li>
+						</ul>
+					</li>
+					<li><a href="http://cbsmth.se">The developer's homepage</a></li>
+					<li><a href="https://plus.google.com/+FredrikKarlström0">The developer on G+</a></li>
+				</ul>
 
-					<h5>Files not downloading to the given destination directory</h5>
-					<ul>
-						<li>The most common error is an invalid download path, such as a path outside of the downloads folder.<br>
-						Open the extension's background page (chrome://extensions &gt; background page) and attempt to download the file again with the "Console" tab open.
-						The following message indicates an invalid target path: <em>Error in respose handler for downloadsInternal.determineFilename: Invalid filename at &hellip;</em></li>
-					</ul>
+				<img src="http://www.gravatar.com/avatar/ae8bfeb002bf86d989cab8c93e0794c6.png?s=36" alt="Gravatar"
+					style="float: left; margin: 0 15px 0 0;">
+				<p>Best regards,<br>&mdash; Fredrik Karlström</p>
 
-					<h5>Domain-based routing</h5>
-					<ul>
-						<li>Some websites serve content through other domains than what is visible in the Omnibar. To verify if this might be your issue, right-click the item and "inspect" it &ndash; look for other domains in the highlighted area.</li>
-					</ul>
-
-					<h5>MIME-based routing</h5>
-					<ul>
-						<li>Some websites serve binary content as "octet-streams," thereby hiding the correct MIME-type. The plugin automatically attempts to match common extensions, but this approach will not cover all cases. Domain-based routing could serve as a workaround in many cases.</li>
-					</ul>
-
-					<h5>Filename-based routing</h5>
-					<ul>
-						<li>"Greedy" matches, i.e. too general keywords matching on unintended downloads, or invalid regular expressions would be two common error causes. For the latter, check the console and/or the extension background page for debugging information.</li>
-					</ul>
-				</div>
-
-				<div class="tab" id="about">
-					<h1>About this extension</h1>
-					<p>This extension was hacked together overnight by yours truly, during the wee hours most sane people spend sleeping. As such, there are certainly many features I've yet to think about, not to mention bugs waiting to be discovered.</p>
-					<p>I'd be most grateful if you'd inform me of any and all such issues via the project source code repository &mdash; and if you feel like adding some code yourself, that'd be beyond awesome!</p>
-	
-					<ul>
-						<li><a href="https://bitbucket.org/lfk/downloads-router-chrome-extension">Official Bitbucket repository</a>
-							<ul>
-								<li><a href="https://bitbucket.org/lfk/downloads-router-chrome-extension/issues">Issue tracker</a></li>
-							</ul>
-						</li>
-						<li><a href="http://cbsmth.se">The developer's homepage</a></li>
-						<li><a href="https://plus.google.com/+FredrikKarlström0">The developer on G+</a></li>
-					</ul>
-
-					<img src="http://www.gravatar.com/avatar/ae8bfeb002bf86d989cab8c93e0794c6.png?s=36" alt="Gravatar" style="float: left; margin: 0 15px 0 0;">
-					<p>Best regards,<br>&mdash; Fredrik Karlström</p>
-	
-					<h3>Licence</h3>
-					<pre>
+				<h3>Licence</h3>
+				<pre>
 Copyright (c) 2014 Fredrik Karlström
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -394,7 +590,7 @@ THE SOFTWARE.
 
 			</div>
 		</div>
-
 		<script src="options.js"></script>
-	</body>
+</body>
+
 </html>

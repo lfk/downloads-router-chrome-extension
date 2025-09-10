@@ -1,28 +1,32 @@
 {
-	"manifest_version": 2,
-
+	"manifest_version": 3,
 	"name": "__MSG_appName__",
 	"short_name": "DLRouter",
 	"description": "__MSG_appDesc__",
 	"default_locale": "en",
-
-	"version": "0.8.1",
-	"options_page": "options.html",
-	"homepage_url": "https://bitbucket.org/lfk/downloads-router-chrome-extension",
-
-	"permissions": [
-		"downloads"
-	],
-
-	"background": {
-		"scripts": ["manager.js"],
-		"persistent": false
+	"version": "1.0.0",
+	"action": {
+		"default_popup": "options.html",
+		"default_icon": {
+			"16": "data/icon16.png",
+			"32": "data/icon32.png",
+			"48": "data/icon48.png",
+			"128": "data/icon128.png"
+		}
 	},
-
+	"options_page": "options.html",
+	"homepage_url": "https://github.com/learn2reid/downloads-router-chrome-extension",
+	"permissions": [
+		"downloads",
+		"storage"
+	],
+	"background": {
+		"service_worker": "service_worker.js"
+	},
 	"icons": {
-		"16":  "data/icon16.png",
-		"32":  "data/icon32.png",
-		"48":  "data/icon48.png",
+		"16": "data/icon16.png",
+		"32": "data/icon32.png",
+		"48": "data/icon48.png",
 		"128": "data/icon128.png"
 	}
 }
