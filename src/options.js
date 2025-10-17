@@ -65,9 +65,10 @@ async function restore_options() {
 	];
 
 	var map_defaults = [
-		{ 'image/jpeg': 'images/', 'application/x-bittorrent': 'torrents/' },
+		// { 'image/jpeg': 'images/', 'application/x-bittorrent': 'torrents/' },
 		{},
-		{}
+		{ 'upload.ee': '• WP/', 'babia.to': '• WP/', 'themeforest.net': '• WP/' , 'codecanyon.net': '• WP/' },
+		{ 'wp|elementor|wordpress': '• WP/' }
 	];
 
 	const storage = await new Promise(resolve => chrome.storage.local.get(maps.concat([ 'dr_order', 'dr_global_ref_folders', 'dr_debug' ]), resolve));
