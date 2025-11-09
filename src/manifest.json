@@ -1,22 +1,24 @@
 {
-	"manifest_version": 2,
+	"manifest_version": 3,
 
 	"name": "__MSG_appName__",
 	"short_name": "DLRouter",
 	"description": "__MSG_appDesc__",
 	"default_locale": "en",
 
-	"version": "0.8.1",
-	"options_page": "options.html",
-	"homepage_url": "https://bitbucket.org/lfk/downloads-router-chrome-extension",
+	"version": "0.9.0",
+	"options_ui": {
+		"page": "options.html"
+	},
+	"homepage_url": "https://github.com/lfk/downloads-router-chrome-extension",
 
 	"permissions": [
-		"downloads"
+		"downloads",
+		"storage"
 	],
 
 	"background": {
-		"scripts": ["manager.js"],
-		"persistent": false
+		"service_worker": "manager.js"
 	},
 
 	"icons": {

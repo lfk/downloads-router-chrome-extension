@@ -12,6 +12,13 @@ to establish routing rules, directing downloads to folders based on filetype, fi
 Changelog
 ---------
 
+### v0.9.0 (November 9, 2025)
+
+* Migrated the extension to be fully compliant with Chrome's Manifest V3
+* The background script has been refactored leverage update Chrome APIs
+* Removed the external Google Fonts dependency to enhance privacy and comply with stricter CSP
+* Added a PRIVACY.md file to clearly document the extension's data handling practices
+
 ### 0.8.1 (September 30, 2014)
 
 * Referrer downloads now use URL as fallback if no referrer information is provided
@@ -21,7 +28,7 @@ Changelog
 ### 0.8 (August 27, 2014)
 
 * Added the global referrers folder mapping option
-* Tweaked the ``fresh install'' detection mechanism to trigger on updates as well
+* Tweaked the `fresh install` detection mechanism to trigger on updates as well
 
 ### 0.7 (July 26, 2014)
 

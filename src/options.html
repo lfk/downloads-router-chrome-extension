@@ -3,7 +3,6 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Downloads Router Configuration</title>
-		<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;subset=latin" rel="stylesheet">
 
 		<style>
 			body {
@@ -11,21 +10,6 @@
 				font-family: 'Open Sans', 'Helvetica', 'Arial', sans-serif;
 				font-size: 0.9em;
 				cursor: default;
-			} header {
-				border-bottom: 1px solid #e0e0e0;
-				padding: 5px 0;
-				margin: 0 0 15px 0;
-			} header img {
-				vertical-align: middle;
-			} table {
-				width: 100%;
-				margin: 0 0 15px 0;
-				border-spacing: 0;
-			} header h1 {
-				font-size: 1.4em;
-				font-weight: 300;
-				vertical-align: middle;
-				display: inline;
 			} .tab h1 {
 				text-transform: uppercase;
 				font-size: 1.6em;
@@ -146,13 +130,8 @@
 	<body>
 		<div id="status"></div>
 		<div id="wrap">
-			<header>
-				<img id="dr-icon" src="data/icon32.png" alt="DR" height="26" width="30">
-				<h1>Downloads Router Configuration</h1>
-			</header>
-
 			<div id="news">
-				<p><strong>(v0.8.1) Sept. 30, 2014:</strong> Bug fixes and fallback cases for referrer- and MIME-rules.</p>
+				<p><strong>(v0.9.0) Nov. 9, 2025:</strong> Refactored to work with Chrome manifest v3</p>
 			</div>
 
 			<ul id="nav">
@@ -167,7 +146,7 @@
 					Destinations must be located within the base downloads folder; use symbolic links to circumvent this restriction (see usage instructions).</p>
 
 					<h2>Rule execution hierarchy</h2>
-					<p>Specify the order in which you would like the tables taversed.<br><em>Default is filename, referrer, mime.</em></p>
+            <p>Specify the order in which you would like the tables traversed.<br><em>Default is filename, referrer, mime.</em></p>
 					<input type="text" id="rule_order" name="rule_order" value="" placeholder="filename, referrer, mime">
 
 					<h2>Filetype &#8680; folder mapping</h2>
@@ -288,7 +267,7 @@
 
 					<h2>Referrer routing</h2>
 
-					<p>A referrer is a website, such as <em>facebook.com</em> or <em>9gag.com</em>.</p>
+					<p>A referrer is a website, such as <em>instagram.com</em>.</p>
 					<p>You do not need to provide the protocol prefix (http://), nor the <em>www</em> subdomain.
 					Any other subdomain, however, such as <em>images.domain.com</em>, IS a required part of the "source domain" field.</p>
 
@@ -353,25 +332,16 @@
 
 				<div class="tab" id="about">
 					<h1>About this extension</h1>
-					<p>This extension was hacked together overnight by yours truly, during the wee hours most sane people spend sleeping. As such, there are certainly many features I've yet to think about, not to mention bugs waiting to be discovered.</p>
-					<p>I'd be most grateful if you'd inform me of any and all such issues via the project source code repository &mdash; and if you feel like adding some code yourself, that'd be beyond awesome!</p>
-	
 					<ul>
-						<li><a href="https://bitbucket.org/lfk/downloads-router-chrome-extension">Official Bitbucket repository</a>
+						<li><a href="https://github.com/lfk/downloads-router-chrome-extension">GitHub repository</a>
 							<ul>
-								<li><a href="https://bitbucket.org/lfk/downloads-router-chrome-extension/issues">Issue tracker</a></li>
+								<li><a href="https://github.com/lfk/downloads-router-chrome-extension/issues">Issue tracker</a></li>
 							</ul>
 						</li>
-						<li><a href="http://cbsmth.se">The developer's homepage</a></li>
-						<li><a href="https://plus.google.com/+FredrikKarlström0">The developer on G+</a></li>
 					</ul>
-
-					<img src="http://www.gravatar.com/avatar/ae8bfeb002bf86d989cab8c93e0794c6.png?s=36" alt="Gravatar" style="float: left; margin: 0 15px 0 0;">
-					<p>Best regards,<br>&mdash; Fredrik Karlström</p>
-	
 					<h3>Licence</h3>
 					<pre>
-Copyright (c) 2014 Fredrik Karlström
+Copyright (c) 2014 lfk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

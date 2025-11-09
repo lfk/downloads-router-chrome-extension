@@ -16,9 +16,11 @@ function save_options() {
 		}
 	}
 
-	localStorage.setItem('dr_mime_map', JSON.stringify(maps[0]));
-	localStorage.setItem('dr_referrer_map', JSON.stringify(maps[1]));
-	localStorage.setItem('dr_filename_map', JSON.stringify(maps[2]));
+	chrome.storage.local.set({
+		dr_mime_map: maps[0],
+		dr_referrer_map: maps[1],
+		dr_filename_map: maps[2]
+	});
 
 
 	var order = document.getElementById('rule_order').value;
@@ -35,9 +37,8 @@ function save_options() {
 		return true; // Again, abusing every()
 	}); 
 
-	localStorage.setItem('dr_order', JSON.stringify(order));
-	localStorage.setItem('dr_global_ref_folders',
-		JSON.parse(document.querySelector('#global_ref_folders').checked));
+	chrome.storage.local.set({dr_order: order});
+	chrome.storage.local.set({dr_global_ref_folders: document.querySelector('#global_ref_folders').checked});
 
 	// Flash a status message
 	var status = document.getElementById('status');
@@ -69,52 +70,51 @@ function restore_options() {
 		{}
 	];
 
-	for(var idx = 0; idx < maps.length; ++idx) {
-		// Restore or create mapping table
-		var map = localStorage.getItem(maps[idx]);
-		if(map) {
-			map = JSON.parse(map);
-		} else {
-			map = map_defaults[idx];
-			localStorage.setItem(maps[idx], JSON.stringify(map));
+	chrome.storage.local.get(maps, function(result) {
+		for(var idx = 0; idx < maps.length; ++idx) {
+			// Restore or create mapping table
+			var map = result[maps[idx]];
+			if(!map) {
+				map = map_defaults[idx];
+				let new_map = {};
+				new_map[maps[idx]] = map;
+				chrome.storage.local.set(new_map);
+			}
+
+			// Create HTML table elements for corresponding map
+			for(var key in map) {
+				var input         = document.createElement('input');
+				input.type        = 'text';
+				input.value       = key;
+				input.placeholder = key;
+
+				var path          = document.createElement('input'); // type = 'file' error explanation here
+				path.type         = 'text';
+				path.value        = map[key];
+				path.placeholder  = map[key];
+
+				add_table_row(tables[idx], input, path);
+			}
 		}
+	});
 
-		// Create HTML table elements for corresponding map
-		for(var key in map) {
-			var input         = document.createElement('input');
-			input.type        = 'text';
-			input.value       = key;
-			input.placeholder = key;
-
-			var path          = document.createElement('input'); // type = 'file' error explanation here
-			path.type         = 'text';
-			path.value        = map[key];
-			path.placeholder  = map[key];
-
-			add_table_row(tables[idx], input, path);
+	chrome.storage.local.get('dr_order', function(result) {
+		var order = result.dr_order;
+		if(!order) {
+			order = ['filename', 'referrer', 'mime'];
+			chrome.storage.local.set({dr_order: order});
 		}
-	}
+		document.getElementById('rule_order').value = order;
+	});
 
-	var order = localStorage.getItem('dr_order');
-	if(order) {
-		order = JSON.parse(order);
-	} else {
-		order = ['filename', 'referrer', 'mime'];
-		localStorage.setItem('dr_order', JSON.stringify(order));
-	}
-
-	document.getElementById('rule_order').value = order;
-
-
-	var global_ref_folders = localStorage.getItem('dr_global_ref_folders');
-	if(global_ref_folders) {
-		global_ref_folders = JSON.parse(global_ref_folders);
-	} else {
-		global_ref_folders = false;
-		localStorage.setItem('dr_global_ref_folders', JSON.stringify(false));
-	}
-
-	document.getElementById('global_ref_folders').checked = global_ref_folders;
+	chrome.storage.local.get('dr_global_ref_folders', function(result) {
+		var global_ref_folders = result.dr_global_ref_folders;
+		if(global_ref_folders === undefined) {
+			global_ref_folders = false;
+			chrome.storage.local.set({dr_global_ref_folders: false});
+		}
+		document.getElementById('global_ref_folders').checked = global_ref_folders;
+	});
 }
 
 function check_trailing(path) {
@@ -206,32 +206,34 @@ function options_setup() {
 	var active = 'routing';
 
 	// Handle new installations by showing the usage instructions and a quick message
-	if(!localStorage.getItem('dr_mime_map')) {
-		active = 'usage';
+	chrome.storage.local.get('dr_mime_map', function(result) {
+		if(!result.dr_mime_map) {
+			active = 'usage';
 
-		var status = document.getElementById('status');
-		status.innerHTML = 'Thank you for installing Downloads Router!<br>Please read the instructions below, then head over to the routing rules to configure the extension.';
-		status.style.display = 'block';
-		setTimeout(function() {
-			status.innerHTML = '';
-			status.style.display = 'none';
-		}, 7500);
-	}
-
-	navs[0].parentNode.dataset.current = active;
-
-	for(var i = 0; i < tabs.length; i++) {
-		if(tabs[i].id != active) {
-			tabs[i].style.display = 'none';
+			var status = document.getElementById('status');
+			status.innerHTML = 'Thank you for installing Downloads Router!<br>Please read the instructions below, then head over to the routing rules to configure the extension.';
+			status.style.display = 'block';
+			setTimeout(function() {
+				status.innerHTML = '';
+				status.style.display = 'none';
+			}, 7500);
 		}
 
-		navs[i].onclick = handle_click;
-		if(navs[i].dataset.tab == active) {
-			navs[i].setAttribute('class', 'active');
-		}
-	}
+		navs[0].parentNode.dataset.current = active;
 
-	restore_options();
+		for(var i = 0; i < tabs.length; i++) {
+			if(tabs[i].id != active) {
+				tabs[i].style.display = 'none';
+			}
+
+			navs[i].onclick = handle_click;
+			if(navs[i].dataset.tab == active) {
+				navs[i].setAttribute('class', 'active');
+			}
+		}
+
+		restore_options();
+	});
 }
 
 function handle_click() {
@@ -250,10 +252,27 @@ function handle_click() {
 	this.parentNode.dataset.current = selected;
 }
 
-/* Event listeners */
+document.addEventListener('DOMContentLoaded', function() {
+	chrome.storage.local.get('dr_version', function(result) {
+		var version = result.dr_version;
+		var manifest_version = chrome.runtime.getManifest().version;
 
-document.addEventListener('DOMContentLoaded', options_setup);
-document.querySelector('#save').addEventListener('click', save_options);
-document.querySelector('#add_mime_route').addEventListener('click', add_mime_route);
-document.querySelector('#add_referrer_route').addEventListener('click', add_referrer_route);
-document.querySelector('#add_filename_route').addEventListener('click', add_filename_route);
+		if(!version || version != manifest_version) {
+			var status = document.getElementById('status');
+			status.innerHTML = 'Thank you for installing Downloads Router!<br>Please read the instructions below, then head over to the routing rules to configure the extension.';
+			status.style.display = 'block';
+			setTimeout(function() {
+				status.innerHTML = '';
+				status.style.display = 'none';
+			}, 7500);
+			chrome.storage.local.set({dr_version: manifest_version});
+		}
+	});
+
+	options_setup();
+
+	document.querySelector('#save').addEventListener('click', save_options);
+	document.querySelector('#add_mime_route').addEventListener('click', add_mime_route);
+	document.querySelector('#add_referrer_route').addEventListener('click', add_referrer_route);
+	document.querySelector('#add_filename_route').addEventListener('click', add_filename_route);
+});

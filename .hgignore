@@ -1,7 +1,0 @@
-syntax: glob
-
-*.un~
-*.swp
-*.tmp
-*.zip
-misc/

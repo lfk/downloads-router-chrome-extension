@@ -1,65 +1,62 @@
-var order    = JSON.parse(localStorage.getItem('dr_order'));
-var rulesets = {};
+const STORAGE_KEYS = {
+	ORDER: 'dr_order',
+	FILENAME_MAP: 'dr_filename_map',
+	REFERRER_MAP: 'dr_referrer_map',
+	MIME_MAP: 'dr_mime_map',
+	GLOBAL_REF_FOLDERS: 'dr_global_ref_folders',
+};
 
-if(!order) { 
-	order = ['filename', 'referrer', 'mime'];
-}
+const DEFAULT_ORDER = ['filename', 'referrer', 'mime'];
 
-rulesets['filename'] = function(downloadItem, suggest) {
-	filename_map = JSON.parse(localStorage.getItem('dr_filename_map'));
+const rules = {
+	filename: applyFilenameRule,
+	referrer: applyReferrerRule,
+	mime: applyMimeRule,
+};
 
-	var keys = Object.keys(filename_map);
-	if(keys.length) {
-		var idx, regex, matches;
-		for(idx = 0; idx < keys.length; idx++) {
-			regex   = new RegExp(keys[idx], 'i');
-			matches = regex.exec(downloadItem.filename);
-			if(matches) {
-				suggest({ filename: filename_map[keys[idx]] + downloadItem.filename });
-				return true;
-			}
+function applyFilenameRule(downloadItem, filename_map) {
+	if (!filename_map) {
+		return null;
+	}
+
+	for (const key of Object.keys(filename_map)) {
+		const regex = new RegExp(key, 'i');
+		if (regex.test(downloadItem.filename)) {
+			return filename_map[key] + downloadItem.filename;
 		}
 	}
 
-	return false;
+	return null;
 }
 
-rulesets['referrer'] = function(downloadItem, suggest) {
-	ref_map = JSON.parse(localStorage.getItem('dr_referrer_map'));
+function applyReferrerRule(downloadItem, ref_map, global_ref_folders) {
+	const url = downloadItem.referrer || downloadItem.url;
+	const matches = url.match(/^https?\:\/\/([^\/:?#]+)(?:[\/:?#]|$)/i);
+	const ref_domain = matches ? matches[1].replace(/^www\./i, '') : null;
 
-	if(Object.keys(ref_map).length) {
-		var matches;
-		if(downloadItem.referrer) {
-			matches    = downloadItem.referrer.match(/^https?\:\/\/([^\/:?#]+)(?:[\/:?#]|$)/i);
-		} else {
-			matches = downloadItem.url.match(/^https?\:\/\/([^\/:?#]+)(?:[\/:?#]|$)/i);
-		}
-
-		var ref_domain = matches && matches[1].replace(/^www\./i, '');
-
-		if(ref_map[ref_domain]) {
-			suggest({ filename: ref_map[ref_domain] + downloadItem.filename });
-			return true;
-		}
+	if (ref_map && ref_domain && ref_map[ref_domain]) {
+		return ref_map[ref_domain] + downloadItem.filename;
 	}
 
-	if(JSON.parse(localStorage.getItem('dr_global_ref_folders'))) {
-		suggest({ filename: ref_domain + '/' + downloadItem.filename });
-		return true;
+	if (global_ref_folders && ref_domain) {
+		return ref_domain + '/' + downloadItem.filename;
 	}
 
-	return false;
+	return null;
 }
 
-rulesets['mime'] = function(downloadItem, suggest) {
-	mime_map  = JSON.parse(localStorage.getItem('dr_mime_map'));
-	mime_type = downloadItem.mime;    
+function applyMimeRule(downloadItem, mime_map) {
+	if (!mime_map) {
+		return null;
+	}
+
+	let mime_type = downloadItem.mime;
 
 	// Octet-stream workaround
-	if(mime_type == 'application/octet-stream') {
-		var matches   = downloadItem.filename.match(/\.([0-9a-z]+)(?:[\?#]|$)/i);
-		var extension = matches && matches[1];
-		var mapping   = {
+	if (mime_type === 'application/octet-stream') {
+		const matches = downloadItem.filename.match(/\.([0-9a-z]+)(?:[\?#]|$)/i);
+		const extension = matches ? matches[1] : null;
+		const mapping = {
 			'mp3': 'audio/mpeg',
 			'pdf': 'application/pdf',
 			'zip': 'application/zip',
@@ -70,38 +67,57 @@ rulesets['mime'] = function(downloadItem, suggest) {
 			'torrent': 'application/x-bittorrent'
 		};
 
-		if(mapping[extension]) {
+		if (extension && mapping[extension]) {
 			mime_type = mapping[extension];
 		}
 	}
 
-	folder = mime_map[mime_type];
-	if(folder) {
-		suggest({ filename: folder + downloadItem.filename });
-		return true;
+	const folder = mime_map[mime_type];
+	if (folder) {
+		return folder + downloadItem.filename;
 	}
 
-	return false;
+	return null;
 }
 
+function suggestLocation(downloadItem, suggest) {
+	(async () => {
+		const settings = await chrome.storage.local.get(Object.values(STORAGE_KEYS));
+		const order = settings[STORAGE_KEYS.ORDER] || DEFAULT_ORDER;
 
+		for (const ruleName of order) {
+			const ruleHandler = rules[ruleName];
+			if (!ruleHandler) {
+				continue;
+			}
 
-chrome.downloads.onDeterminingFilename.addListener(function(downloadItem, suggest) {
-	var done = false;
+			let newFilename;
+			if (ruleName === 'referrer') {
+				newFilename = ruleHandler(
+					downloadItem,
+					settings[STORAGE_KEYS.REFERRER_MAP],
+					settings[STORAGE_KEYS.GLOBAL_REF_FOLDERS]
+				);
+			} else {
+				newFilename = ruleHandler(
+					downloadItem,
+					settings[STORAGE_KEYS[`${ruleName.toUpperCase()}_MAP`]]
+				);
+			}
 
-	order.every(function(idx) {
-		done = rulesets[idx](downloadItem, suggest);
-		if(done) {
-			return false;
+			if (newFilename) {
+				suggest({ filename: newFilename });
+				return;
+			}
 		}
-		return true;
-	});
-});
 
-var version = localStorage.getItem('dr_version');
+		// If no rules matched, suggest the original filename to prevent a delay.
+		suggest({ filename: downloadItem.filename });
+	})();
 
-if(!version || version != chrome.runtime.getManifest().version) {
-	// Open the options page directly after installing or updating the extension
-	chrome.tabs.create({ url: "options.html" });
-	localStorage.setItem('dr_version', chrome.runtime.getManifest().version);
+	return true;
+}
+
+if (!chrome.downloads.onDeterminingFilename.hasListener(suggestLocation)) {
+	chrome.downloads.onDeterminingFilename.addListener(suggestLocation);
 }
